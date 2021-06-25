@@ -16,7 +16,7 @@
 
 static const size_t NumberSamples = 32;
 
-TEST(ZSTD, Compressor)
+TEST(Bzip, Basic)
 {
     auto gsize = cr::uniform(0, 4096);
     auto generator = cr::str::alpha(gsize);
@@ -39,7 +39,42 @@ TEST(ZSTD, Compressor)
     }
 }
 
-TEST(ZSTD, String)
+TEST(Bzip, Pods)
+{
+    std::stringstream ss;
+    bzip::Compressor c{ss, 2};
+
+    int a = -42;
+    int64 b = -37;
+    float x = -1.0;
+    double y = -2.0;
+    c.write_pod(a);
+    c.write_pod(b);
+    c.write_pod(x);
+    c.write_pod(y);
+    c.close();
+
+    bzip::Decompressor d{ss, 2};
+    int a2;
+    int64 b2;
+    float x2;
+    double y2;
+    
+    EXPECT_TRUE(d.read_pod(a2));
+    EXPECT_EQ(a2, a);
+    
+    EXPECT_TRUE(d.read_pod(b2));
+    EXPECT_EQ(b2, b);
+    
+    EXPECT_TRUE(d.read_pod(x2));
+    EXPECT_EQ(x2, x);
+    
+    EXPECT_TRUE(d.read_pod(y2));
+    EXPECT_EQ(y2, y);
+}
+
+
+TEST(Bzip, Strings)
 {
     auto gsize = cr::uniform(0, 1024);
     auto generator = cr::str::any(gsize);
