@@ -1,6 +1,7 @@
 // Copyright (C) 2021 by Mark Melton
 //
 
+#pragma once
 #include "core/zstd/decompressor.h"
 #include "core/zstd/compressor.h"
 
