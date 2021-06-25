@@ -3,11 +3,10 @@
 
 #include <gtest/gtest.h>
 #include <range/v3/view/take.hpp>
-// #include "core/codex/zstd/compressor.h"
-// #include "core/codex/zstd/decompressor.h"
-// #include "core/codex/zstd/compress.h"
-// #include "core/codex/zstd/decompress.h"
-// #include "core/codex/zstd/decompress_to.h"
+#include "core/codex/bzip/compress.h"
+#include "core/codex/bzip/compressor.h"
+#include "core/codex/bzip/decompress.h"
+#include "core/codex/bzip/decompressor.h"
 #include "core/concurrent/scoped_task.h"
 #include "core/concurrent/queue/lockfree_spsc.h"
 #include "core/concurrent/queue/sink_spsc.h"
@@ -19,38 +18,38 @@ static const size_t NumberSamples = 32;
 
 TEST(ZSTD, Compressor)
 {
-    auto gsize = cr::uniform(66000, 67000);
+    auto gsize = cr::uniform(0, 4096);
     auto generator = cr::str::alpha(gsize);
-    for (auto str : generator | v::take(1)) {
+    for (auto str : generator | v::take(NumberSamples)) {
 	std::stringstream ss;
-	zstd::Compressor c{ss};
-
+	bzip::Compressor c{ss, 256};
+	
 	for (auto i = 0ul; i < str.size(); i += 1024) {
 	    auto edx = std::min(i + 1024, str.size());
-	    c.write(&str[i], &str[edx]);
+	    c.write(&str[i], edx - i);
 	}
 	c.close();
 
-	zstd::Decompressor d{ss};
+	bzip::Decompressor d{ss, 256};
 	string ustr;
 	while (d.underflow())
-	    ustr += string_view{d.get().ptr_base(), d.get().position()};
+	    ustr += d.view();
 	
 	EXPECT_EQ(str, ustr);
     }
 }
 
-// TEST(ZSTD, String)
-// {
-//     auto gsize = cr::uniform(0, 1024);
-//     auto generator = cr::str::any(gsize);
-//     for (auto str : generator | v::take(NumberSamples))
-//     {
-// 	auto zstr = zstd::compress(str);
-// 	auto ustr = zstd::decompress(zstr);
-// 	EXPECT_EQ(str, ustr);
-//     }
-// }
+TEST(ZSTD, String)
+{
+    auto gsize = cr::uniform(0, 1024);
+    auto generator = cr::str::any(gsize);
+    for (auto str : generator | v::take(NumberSamples))
+    {
+	auto zstr = bzip::compress(str);
+	auto ustr = bzip::decompress(zstr);
+	EXPECT_EQ(str, ustr);
+    }
+}
 
 // TEST(ZSTD, Stream)
 // {
