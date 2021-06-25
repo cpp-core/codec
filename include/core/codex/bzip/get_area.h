@@ -16,6 +16,7 @@ public:
     string_view view() const { return {ptr_, (size_t)(next_ - ptr_)}; }
     
     char consume();
+    void discard(size_t n);
     void clear();
 
 private:

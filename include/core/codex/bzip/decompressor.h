@@ -27,6 +27,16 @@ public:
     // `false` and set `line` to nil.
     bool read_line(string& line);
 
+    // Attempt to read up to `count` decompressed bytes placing them
+    // into buffer. Return the number of bytes read.
+    size_t read_bytes(char *buffer, size_t count);
+
+    // Attempt to read decompressed bytes representing the pod type T
+    // into `value`. Return `true` if the value is successfully read;
+    // otherwise, return `false`.
+    template<class T>
+    bool read_pod(T& value) { return read_bytes((char*)&value, sizeof(T)) == sizeof(T); }
+
     // Attempt to read the next chunk of decompressed characters into
     // the get area (discarding any existing characters) and update
     // the get area pointers discarding any Return `true` if

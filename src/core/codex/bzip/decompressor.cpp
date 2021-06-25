@@ -58,6 +58,23 @@ bool Decompressor<Source>::read_line(string& line) {
 }
 
 template<class Source>
+size_t Decompressor<Source>::read_bytes(char *buffer, size_t requested) {
+    size_t count{0};
+    while (count < requested) {
+	if (not get_.available()) {
+	    if (not underflow())
+		break;
+	}
+	auto v = get_.view();
+	auto n = std::min(requested - count, v.size());
+	memcpy(buffer + count, v.data(), n);
+	count += n;
+	get_.discard(n);
+    }
+    return count;
+}
+
+template<class Source>
 bool Decompressor<Source>::underflow() {
     if (not stream_)
 	return false;

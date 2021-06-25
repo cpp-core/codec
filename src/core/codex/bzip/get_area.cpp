@@ -20,6 +20,10 @@ char GetArea::consume() {
     return c;
 }
 
+void GetArea::discard(size_t n) {
+    ptr_ += n;
+}
+
 void GetArea::clear() {
     next_ = buffer_.get();
     avail_ = capacity();

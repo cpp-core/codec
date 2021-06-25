@@ -15,6 +15,9 @@ public:
 
     void close();
     void write(const char *input, size_t input_len);
+    
+    template<class T>
+    void write_pod(T& value) { write(reinterpret_cast<const char*>(&value), sizeof(T)); }
 
 private:
     Sink& sink_;
