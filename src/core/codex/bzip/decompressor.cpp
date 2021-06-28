@@ -4,42 +4,43 @@
 #include <istream>
 #include <sstream>
 #include "core/codex/bzip/decompressor.h"
+#include "core/codex/zstd/adapter.h"
 
 namespace bzip {
 
 template<class Source>
 Decompressor<Source>::Decompressor(Source& source, size_t n)
-    : source_(source)
-    , stream_(new_stream())
-    , get_(stream_->next_out, stream_->avail_out, n)
-    , put_(stream_->next_in, stream_->avail_in, n)
+    : src_(source)
+    , bz_(new_stream())
+    , get_(bz_->next_out, bz_->avail_out, n)
+    , put_(bz_->next_in, bz_->avail_in, n)
 {
-    auto rc = BZ2_bzDecompressInit(stream_.get(), 0, 0);
+    auto rc = BZ2_bzDecompressInit(bz_.get(), 0, 0);
     if (rc != BZ_OK)
 	throw std::runtime_error(fmt::format("BZ2_bzDecompressInit: failed with {}", rc));
 }
 
 template<class Source>
 Decompressor<Source>::~Decompressor() {
-    if (stream_)
+    if (bz_)
 	close();
 }
 
 template<class Source>
 void Decompressor<Source>::close() {
-    if (not stream_)
+    if (not bz_)
 	throw std::runtime_error("bzip::Decompressor:: stream already closed");
-    auto rc = BZ2_bzDecompressEnd(stream_.get());
+    auto rc = BZ2_bzDecompressEnd(bz_.get());
     if (rc != BZ_OK)
 	throw std::runtime_error(fmt::format("BZ2_bzDecompressEnd: failed with {}", rc));
-    stream_.reset();
+    bz_.reset();
 }
 
 template<class Source>
 bool Decompressor<Source>::read_line(string& line) {
     line.clear();
     
-    if (not stream_)
+    if (not bz_)
 	return false;
     
     while (true) {
@@ -76,12 +77,15 @@ size_t Decompressor<Source>::read_bytes(char *buffer, size_t requested) {
 
 template<class Source>
 bool Decompressor<Source>::underflow() {
-    if (not stream_)
+    if (not bz_)
 	return false;
-    
+
     while (true) {
-	if (not put_.available()) {
-	    if (not put_.read(source_)) {
+	if (put_.empty()) {
+	    auto count = zstd::InStreamAdapter<Source>::read(src_, put_.begin(), put_.capacity());
+	    put_.update(count);
+	    
+	    if (count == 0) {
 		close();
 		return false;
 	    }
@@ -89,7 +93,7 @@ bool Decompressor<Source>::underflow() {
 	
 	get_.clear();
 	
-	auto rc = BZ2_bzDecompress(stream_.get());
+	auto rc = BZ2_bzDecompress(bz_.get());
 	if (rc != BZ_OK and rc != BZ_STREAM_END)
 	    throw std::runtime_error(fmt::format("BZ2_bzDecompress: failed with {}", rc));
 

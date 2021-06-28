@@ -13,7 +13,7 @@ namespace bzip {
 //
 class GetArea : public core::GetArea {
 public:
-    // Construct an area of the given `capacity` for manaing the Bzip
+    // Construct an area of the given `capacity` for managing the Bzip
     // output.
     GetArea(char *&next, uint& avail, uint capacity);
 

@@ -48,8 +48,8 @@ public:
     string_view view() const { return get_.view(); }
 
 private:
-    Source& source_;
-    std::unique_ptr<bz_stream> stream_;
+    Source& src_;
+    std::unique_ptr<bz_stream> bz_;
     GetArea get_;
     PutArea put_;
 };
