@@ -14,7 +14,7 @@
 #include "core/range/sample.h"
 #include "core/range/string.h"
 
-static const size_t NumberSamples = 32;
+static const size_t NumberSamples = 1;
 
 TEST(Bzip, Basic)
 {
@@ -22,7 +22,7 @@ TEST(Bzip, Basic)
     auto generator = cr::str::alpha(gsize);
     for (auto str : generator | v::take(NumberSamples)) {
 	std::stringstream ss;
-	bzip::Compressor c{ss, 256};
+	bzip::Compressor c{ss, 64};
 	
 	for (auto i = 0ul; i < str.size(); i += 1024) {
 	    auto edx = std::min(i + 1024, str.size());
@@ -30,7 +30,7 @@ TEST(Bzip, Basic)
 	}
 	c.close();
 
-	bzip::Decompressor d{ss, 256};
+	bzip::Decompressor d{ss, 64};
 	string ustr;
 	while (d.underflow())
 	    ustr += d.view();
