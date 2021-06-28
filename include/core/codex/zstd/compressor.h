@@ -54,10 +54,10 @@ public:
     void write(const char *begin, size_t count) { write(begin, begin + count); }
 
     // Return a reference to the put area for writing data.
-    ZstdPutArea& put() { return put_; }
+    PutArea& put() { return put_; }
 
     // Return a reference to the put area for writing data.
-    const ZstdPutArea& put() const { return put_; }
+    const PutArea& put() const { return put_; }
 
     // Return a reference to the get area for reading data.
     ZstdGetArea& get() { return get_; }
@@ -68,7 +68,7 @@ public:
 private:
     Stream& os_;
     ZSTD_CStream *zsc_;
-    ZstdPutArea put_;
+    PutArea put_;
     ZstdGetArea get_;
     size_t count_{0};
 };

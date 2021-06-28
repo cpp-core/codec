@@ -54,29 +54,43 @@ public:
     // `false` and set `line` to nil.
     bool read_line(string& line);
 
+    // Attempt to read up to `count` decompressed bytes placing them
+    // into buffer. Return the number of bytes read.
+    size_t read_bytes(char *buffer, size_t count);
+
+    // Attempt to read decompressed bytes representing the pod type T
+    // into `value`. Return `true` if the value is successfully read;
+    // otherwise, return `false`.
+    template<class T>
+    bool read_pod(T& value) { return read_bytes((char*)&value, sizeof(T)) == sizeof(T); }
+
     // Attempt to read the next chunk of decompressed characters into
-    // the get area and update the get area pointers. Return `true` if
+    // the get area (discarding any existing characters) and update
+    // the get area pointers discarding any Return `true` if
     // characters are successfully read, `false` otherwise.
     bool underflow();
 
+    // Return a view of the current get area, i.e. the characters that
+    // are ready to be read.
+    string_view view() const { return get_.view(); }
+
     // Return a reference to the get area for writing data.
-    ZstdGetArea& get() { return get_; }
+    GetArea& get() { return get_; }
 
     // Return a reference to tht get area for writing data.
-    const ZstdGetArea& get() const { return get_; }
+    const GetArea& get() const { return get_; }
 
 private:
     // Return a reference to the put area for writing data.
-    ZstdPutArea& put() { return put_; }
+    StreamPutArea& put() { return put_; }
 
     // Return a reference to tht put area for writing data.
-    const ZstdPutArea& put() const { return put_; }
+    const StreamPutArea& put() const { return put_; }
 
     Stream& is_;
     ZSTD_DStream *zsd_;
-    ZstdPutArea put_;
-    ZstdGetArea get_;
-    const char *ptr_;
+    StreamPutArea put_;
+    GetArea get_;
 };
 
 

@@ -42,12 +42,11 @@ string compress(string_view str)
 template<class InStream, class OutStream>
 void compress(InStream& is, OutStream& os) {
     Compressor c{os};
-    while (auto count = InStreamAdapter<InStream>::read(is,
-							c.put().ptr_base(),
-							c.put().capacity())) {
-	c.put().set_area(0, count);
-	c.write();
-    }
+    auto n = ZSTD_CStreamInSize();
+    auto block = std::make_unique<char[]>(n);
+    auto ptr = block.get();
+    while (auto count = InStreamAdapter<InStream>::read(is, ptr, n))
+	c.write(ptr, ptr + count);
 }
 
 }; // zstd

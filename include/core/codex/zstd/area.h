@@ -122,4 +122,163 @@ private:
 using ZstdPutArea = ZstdArea<ZSTD_inBuffer>;
 using ZstdGetArea = ZstdArea<ZSTD_outBuffer>;
 
+// GetArea, PutArea
+//
+// Certain compression interfaces (.e.g. bzlib, zstd) expect the
+// client to maintain buffers for both sending / receiving data to /
+// from the library. The libraries read / write data directly to /
+// from a pointer with a capacity that is owned by the library but
+// managed by both the library and the client.
+//
+// The GetArea and PutArea classes provide crisp interfaces to make
+// this interplay more explicit. References to the libraries `begin`
+// and `count` variables are fed to the constructors and updated to
+// reflect the allocated buffer space.
+//
+// From the libraries perspective, data should be read / written starting at
+// `begin` up to `begin` + `count`.
+//
+// From the client perspective, data should be read / written using the API
+// calls.
+//
+
+// Provide a buffer from which to 'get' characters.
+//
+class GetAreaBase {
+public:
+    // Allocate a buffer of `capacity` bytes, set `begin` to the
+    // start of the buffer and `count` to the capacity.
+    GetAreaBase(uint capacity)
+	: capacity_(capacity)
+	, block_(std::make_unique<char[]>(capacity_))
+	, ptr_(nullptr)
+	, end_(nullptr) {
+    }
+
+    char *begin() { return block_.get(); }
+
+    // Return true if there are character to be read.
+    bool available() const { return ptr_ < end_; }
+
+    // Return the total capacity of the area.
+    uint capacity() const { return capacity_; }
+
+    // Return the current character without advancing.
+    char peek() const { return *ptr_; }
+
+    // Return a view of the available characters.
+    string_view view() const { return {ptr_, (size_t)(end_ - ptr_)}; }
+
+    // Return the current character and advance to the next character.
+    char consume() { return *ptr_++; }
+
+    // Advance to the next `n` characters.
+    void discard(size_t n) { ptr_ += n; }
+
+private:
+    size_t capacity_;
+    std::unique_ptr<char[]> block_;
+    
+protected:
+    const char *ptr_, *end_;
+};
+
+class GetArea : public GetAreaBase {
+public:
+    GetArea(size_t capacity)
+	: GetAreaBase(capacity) {
+	buffer_.dst = begin();
+	clear_pre();
+    }
+
+    void clear_pre() {
+	buffer_.pos = 0;
+	buffer_.size = capacity();
+    }
+
+    void update_post() {
+	ptr_ = begin();
+	end_ = ptr_ + buffer_.pos;
+    }
+    
+    ZSTD_outBuffer *buffer() {
+	return &buffer_;
+    }
+    
+    ZSTD_outBuffer buffer_;
+};
+
+class PutAreaBase {
+public:
+    PutAreaBase(size_t capacity)
+	: capacity_(capacity)
+	, block_(std::make_unique<char[]>(capacity_))
+    { }
+
+    char *begin() { return block_.get(); }
+    size_t capacity() { return capacity_; }
+    
+private:
+    size_t capacity_;
+    std::unique_ptr<char[]> block_;
+};
+
+class StreamPutArea : public PutAreaBase {
+public:
+    StreamPutArea(size_t capacity)
+	: PutAreaBase(capacity)
+    {
+	buffer_.src = begin();
+	buffer_.pos = 0;
+	buffer_.size = 0;
+    }
+    
+    void update(size_t offset, size_t count) {
+	buffer_.pos = offset;
+	buffer_.size = count;
+    }
+
+    bool empty() const {
+	return buffer_.pos >= buffer_.size;
+    }
+
+    ZSTD_inBuffer *buffer() {
+	return &buffer_;
+    }
+
+private:
+    ZSTD_inBuffer buffer_;
+};
+
+class PutArea {
+public:
+    PutArea()
+    {
+	clear();
+    }
+    
+    bool empty() const {
+	return buffer_.pos >= buffer_.size;
+    }
+
+    void clear() {
+	buffer_.src = nullptr;
+	buffer_.pos = 0;
+	buffer_.size = 0;
+    }
+    
+    void update(const char *begin, const char *end) {
+	buffer_.src = begin;
+	buffer_.pos = 0;
+	buffer_.size = end - begin;
+    }
+
+    ZSTD_inBuffer *buffer() {
+	return &buffer_;
+    }
+
+private:
+    ZSTD_inBuffer buffer_;
+};
+
 }; // zstd

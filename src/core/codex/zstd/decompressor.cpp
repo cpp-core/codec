@@ -18,7 +18,6 @@ Decompressor<Stream>::Decompressor(Stream& is, size_t n)
     , zsd_(ZSTD_createDStream())
     , put_(n > 0 ? n : ZSTD_DStreamInSize())
     , get_(n > 0 ? n : ZSTD_DStreamOutSize())
-    , ptr_(get().ptr_base())
 { }
 
 template<class Stream>
@@ -34,25 +33,17 @@ bool Decompressor<Stream>::read_line(string& line) {
     if (zsd_ == nullptr)
 	return false;
 
-    const char *end = get().ptr_position();
     while (true) {
-	while (ptr_ < end and *ptr_ != '\n') {
-	    line.push_back(*ptr_);
-	    ++ptr_;
-	}
-
-	if (ptr_ < end and *ptr_ == '\n') {
-	    ++ptr_;
-	    return true;
+	while (get().available()) {
+	    auto c = get().consume();
+	    if (c == '\n') return true;
+	    else line.push_back(c);
 	}
 
 	underflow();
 
-	if (get().position() == 0)
+	if (not get().available())
 	    return line.size() > 0;
-	
-	ptr_ = get().ptr_base();
-	end = get().ptr_position();
     }
 }
 
@@ -63,8 +54,8 @@ bool Decompressor<Stream>::underflow() {
 
     while (true) {
 	if (put().empty()) {
-	    auto count = InStreamAdapter<Stream>::read(is_, put().ptr_base(), put().capacity());
-	    put().set_area(0, count);
+	    auto count = InStreamAdapter<Stream>::read(is_, put().begin(), put().capacity());
+	    put().update(0, count);
 
 	    if (count == 0) {
 		close();
@@ -72,11 +63,15 @@ bool Decompressor<Stream>::underflow() {
 	    }
 	}
 
-	get().reset();
-	auto r = ZSTD_decompressStream(zsd_, get().zbuffer(), put().zbuffer());
+	get().clear_pre();
+						   
+	auto r = ZSTD_decompressStream(zsd_, get().buffer(), put().buffer());
 	if (ZSTD_isError(r))
 	    throw zstd::error("read: %s", ZSTD_getErrorName(r));
-	if (get().position() > 0)
+						   
+	get().update_post();
+
+	if (get().available())
 	    return true;
     }
 }

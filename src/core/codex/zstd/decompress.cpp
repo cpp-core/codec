@@ -53,7 +53,7 @@ template<class InStream, class OutStream>
 void decompress(InStream& is, OutStream&os) {
     Decompressor d{is};
     while (d.underflow())
-	OutStreamAdapter<OutStream>::write(os, d.get().ptr_base(), d.get().position());
+	OutStreamAdapter<OutStream>::write(os, d.view().data(), d.view().size());
     OutStreamAdapter<OutStream>::finish(os);
 }
 

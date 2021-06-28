@@ -15,7 +15,6 @@ template<class Stream>
 Compressor<Stream>::Compressor(Stream& os, size_t n)
     : os_(os)
     , zsc_(ZSTD_createCStream())
-    , put_(n > 0 ? n : ZSTD_CStreamInSize())
     , get_(n > 0 ? n : ZSTD_CStreamOutSize())
 { }
 
@@ -31,23 +30,20 @@ void Compressor<Stream>::write() {
 	throw zstd::error("attempt to write to closed stream");
     
     while (not put().empty()) {
-	auto r = ZSTD_compressStream(zsc_, get().zbuffer(), put().zbuffer());
+	auto r = ZSTD_compressStream(zsc_, get().zbuffer(), put().buffer());
 	if (ZSTD_isError(r))
 	    throw zstd::error("write: ", ZSTD_getErrorName(r));
 	OutStreamAdapter<Stream>::write(os_, get().ptr_base(), get().position());
 	count_ += get().position();
 	get().reset();
     }
-    put().reset();
+    put().clear();
 }
 
 template<class Stream>
 void Compressor<Stream>::write(const char *begin, const char *end) {
-    const char *p = begin;
-    while (p < end) {
-	p = put().insert(p, end);
-	write();
-    }
+    put().update(begin, end);
+    write();
 }
 
 template<class Stream>
