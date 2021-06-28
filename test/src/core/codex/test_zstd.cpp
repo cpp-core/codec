@@ -17,13 +17,13 @@
 
 static const size_t NumberSamples = 32;
 
-TEST(ZSTD, Compressor)
+TEST(ZSTD, Basic)
 {
-    auto gsize = cr::uniform(66000, 67000);
+    auto gsize = cr::uniform(0, 1024);
     auto generator = cr::str::alpha(gsize);
     for (auto str : generator | v::take(1)) {
 	std::stringstream ss;
-	zstd::Compressor c{ss};
+	zstd::Compressor c{ss, 64};
 
 	for (auto i = 0ul; i < str.size(); i += 1024) {
 	    auto edx = std::min(i + 1024, str.size());
@@ -31,10 +31,10 @@ TEST(ZSTD, Compressor)
 	}
 	c.close();
 
-	zstd::Decompressor d{ss};
+	zstd::Decompressor d{ss, 64};
 	string ustr;
 	while (d.underflow())
-	    ustr += string_view{d.get().ptr_base(), d.get().position()};
+	    ustr += d.view();
 	
 	EXPECT_EQ(str, ustr);
     }
