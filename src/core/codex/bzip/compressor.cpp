@@ -37,6 +37,8 @@ void Compressor<Sink>::close() {
 	if (rc != BZ_FINISH_OK and rc != BZ_STREAM_END)
 	    throw std::runtime_error
 		(fmt::format("BZ2_bzCompress(stream, BZ_FINISH): failed with {}", rc));
+
+	get_.update();
 	
 	auto data = get_.view();
 	sink_.write(data.data(), data.size());

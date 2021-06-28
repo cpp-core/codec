@@ -3,28 +3,29 @@
 
 #pragma once
 #include "core/common.h"
+#include "core/codex/util/get_area.h"
 
 namespace bzip {
 
-class GetArea {
+// Encapsulate Bzip (de)compression output by wrapping the Bzip
+// library variables in a minimal API that allows structured access to
+// the data (set core::GetArea for the interface).
+//
+class GetArea : public core::GetArea {
 public:
+    // Construct an area of the given `capacity` for manaing the Bzip
+    // output.
     GetArea(char *&next, uint& avail, uint capacity);
 
-    bool available() const { return ptr_ < next_; }
-    uint capacity() const { return capacity_; }
-    char peek() const { return *ptr_; }
-    string_view view() const { return {ptr_, (size_t)(next_ - ptr_)}; }
-    
-    char consume();
-    void discard(size_t n);
+    // Prepare to recieve output from Bzip.
     void clear();
 
+    // Update the get area with new output from Bzip.
+    void update();
+	  
 private:
     char *&next_;
     uint& avail_;
-    uint capacity_;
-    std::unique_ptr<char[]> buffer_;
-    char *ptr_;
 };
 
 }; // bzip

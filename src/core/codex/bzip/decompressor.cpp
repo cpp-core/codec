@@ -86,11 +86,14 @@ bool Decompressor<Source>::underflow() {
 		return false;
 	    }
 	}
+	
 	get_.clear();
 	
 	auto rc = BZ2_bzDecompress(stream_.get());
 	if (rc != BZ_OK and rc != BZ_STREAM_END)
 	    throw std::runtime_error(fmt::format("BZ2_bzDecompress: failed with {}", rc));
+
+	get_.update();
 	
 	if (get_.available())
 	    return true;

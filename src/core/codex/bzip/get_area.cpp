@@ -6,28 +6,21 @@
 namespace bzip {
 
 GetArea::GetArea(char *&next, uint& avail, uint capacity)
-    : next_(next)
-    , avail_(avail)
-    , capacity_(capacity)
-    , buffer_(std::make_unique<char[]>(capacity_))
-    , ptr_(nullptr)
-{
-    clear();
-}
-
-char GetArea::consume() {
-    auto c = *ptr_++;
-    return c;
-}
-
-void GetArea::discard(size_t n) {
-    ptr_ += n;
+    : core::GetArea(capacity)
+    , next_(next)
+    , avail_(avail) {
+    next_ = begin();
+    avail_ = 0;
 }
 
 void GetArea::clear() {
-    next_ = buffer_.get();
+    next_ = begin();
     avail_ = capacity();
-    ptr_ = next_;
+}
+
+void GetArea::update() {
+    ptr_ = begin();
+    end_ = next_;
 }
 
 }; // bzip

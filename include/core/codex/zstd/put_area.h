@@ -8,59 +8,47 @@
 namespace zstd
 {
 
+// Encapsulate ZSTD decompression input by wrapping the
+// ZSTD_inBuffer in a minimal API.
+//
 class PutArea : public core::BufferedArea {
 public:
-    PutArea(size_t capacity)
-	: core::BufferedArea(capacity)
-    {
-	buffer_.src = begin();
-	buffer_.pos = 0;
-	buffer_.size = 0;
-    }
-    
-    void update(size_t offset, size_t count) {
-	buffer_.pos = offset;
-	buffer_.size = count;
-    }
+    // Construct an area of the given `capacity` for holding the ZSTD
+    // input.
+    PutArea(size_t capacity);
 
-    bool empty() const {
-	return buffer_.pos >= buffer_.size;
-    }
+    // Return true if ZSTD has consumed all the input data.
+    bool empty() const;
 
-    ZSTD_inBuffer *buffer() {
-	return &buffer_;
-    }
+    // Update the put area with data that has been read externally.
+    void update(size_t offset, size_t count);
+
+    // Return a pointer to the ZSTD input buffer object.
+    ZSTD_inBuffer *buffer() { return &buffer_; }
 
 private:
     ZSTD_inBuffer buffer_;
 };
 
+// Encapsulate ZSTD compression input by wrapping the
+// ZSTD_inBuffer in a minimal API.
+//
 class UnbufferedPutArea {
 public:
-    UnbufferedPutArea()
-    {
-	clear();
-    }
-    
-    bool empty() const {
-	return buffer_.pos >= buffer_.size;
-    }
+    // Construct a empty put area.
+    UnbufferedPutArea();
 
-    void clear() {
-	buffer_.src = nullptr;
-	buffer_.pos = 0;
-	buffer_.size = 0;
-    }
-    
-    void update(const char *begin, const char *end) {
-	buffer_.src = begin;
-	buffer_.pos = 0;
-	buffer_.size = end - begin;
-    }
+    // Return true if ZSTD has consumed all the input data.
+    bool empty() const;
 
-    ZSTD_inBuffer *buffer() {
-	return &buffer_;
-    }
+    // Clear the put area.
+    void clear();
+
+    // Update the put area with new client data.
+    void update(const char *begin, const char *end);
+
+    // Return a pointer to the ZSTD input buffer object.
+    ZSTD_inBuffer *buffer() { return &buffer_; }
 
 private:
     ZSTD_inBuffer buffer_;
