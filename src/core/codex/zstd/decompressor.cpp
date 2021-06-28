@@ -12,22 +12,22 @@
 namespace zstd
 {
 
-template<class Stream>
-Decompressor<Stream>::Decompressor(Stream& is, size_t n)
+template<class Source>
+Decompressor<Source>::Decompressor(Source& is, size_t n)
     : is_(is)
     , zsd_(ZSTD_createDStream())
     , put_(n > 0 ? n : ZSTD_DStreamInSize())
     , get_(n > 0 ? n : ZSTD_DStreamOutSize())
 { }
 
-template<class Stream>
-Decompressor<Stream>::~Decompressor() {
+template<class Source>
+Decompressor<Source>::~Decompressor() {
     if (zsd_)
 	close();
 }
 
-template<class Stream>
-bool Decompressor<Stream>::read_line(string& line) {
+template<class Source>
+bool Decompressor<Source>::read_line(string& line) {
     line.clear();
     
     if (zsd_ == nullptr)
@@ -47,14 +47,32 @@ bool Decompressor<Stream>::read_line(string& line) {
     }
 }
 
-template<class Stream>
-bool Decompressor<Stream>::underflow() {
+template<class Source>
+size_t Decompressor<Source>::read_bytes(char *buffer, size_t requested) {
+    size_t count{0};
+    while (count < requested) {
+	if (not get_.available()) {
+	    if (not underflow())
+		break;
+	}
+
+	auto n = std::min(requested - count, get_.size());
+	memcpy(buffer + count, get_.data(), n);
+	count += n;
+	get_.discard(n);
+    }
+    return count;
+}
+
+
+template<class Source>
+bool Decompressor<Source>::underflow() {
     if (zsd_ == nullptr)
 	throw zstd::error("attempt to read from closed stream");
 
     while (true) {
 	if (put().empty()) {
-	    auto count = InStreamAdapter<Stream>::read(is_, put().begin(), put().capacity());
+	    auto count = InStreamAdapter<Source>::read(is_, put().begin(), put().capacity());
 	    put().update(0, count);
 
 	    if (count == 0) {
@@ -76,8 +94,8 @@ bool Decompressor<Stream>::underflow() {
     }
 }
 
-template<class Stream>
-void Decompressor<Stream>::close() {
+template<class Source>
+void Decompressor<Source>::close() {
     if (zsd_ == nullptr)
 	throw zstd::error("attempt to close already closed stream");
     ZSTD_freeDStream(zsd_);

@@ -11,44 +11,40 @@
 namespace zstd
 {
 
-template<class Stream>
-Compressor<Stream>::Compressor(Stream& os, size_t n)
+template<class Sink>
+Compressor<Sink>::Compressor(Sink& os, size_t n)
     : os_(os)
     , zsc_(ZSTD_createCStream())
     , get_(n > 0 ? n : ZSTD_CStreamOutSize())
 { }
 
-template<class Stream>
-Compressor<Stream>::~Compressor() {
+template<class Sink>
+Compressor<Sink>::~Compressor() {
     if (zsc_)
 	close();
 }
 
-template<class Stream>
-void Compressor<Stream>::write() {
+template<class Sink>
+void Compressor<Sink>::write(const char *begin, const char *end) {
     if (zsc_ == nullptr)
 	throw zstd::error("attempt to write to closed stream");
+
+    put().update(begin, end);
 
     while (not put().empty()) {
 	auto r = ZSTD_compressStream(zsc_, get().buffer(), put().buffer());
 	if (ZSTD_isError(r))
 	    throw zstd::error("write: ", ZSTD_getErrorName(r));
 	get().update();
-	OutStreamAdapter<Stream>::write(os_, get().view().data(), get().view().size());
-	count_ += get().view().size();
+	OutStreamAdapter<Sink>::write(os_, get().data(), get().size());
+	count_ += get().size();
 	get().clear();
     }
     put().clear();
 }
 
-template<class Stream>
-void Compressor<Stream>::write(const char *begin, const char *end) {
-    put().update(begin, end);
-    write();
-}
-
-template<class Stream>
-void Compressor<Stream>::close() {
+template<class Sink>
+void Compressor<Sink>::close() {
     if (zsc_ == nullptr)
 	throw zstd::error("attempt to close already closed stream");
     
@@ -57,12 +53,12 @@ void Compressor<Stream>::close() {
 	if (ZSTD_isError(r))
 	    throw zstd::error("close: %s", ZSTD_getErrorName(r));
 	get().update();
-	OutStreamAdapter<Stream>::write(os_, get().view().data(), get().view().size());
+	OutStreamAdapter<Sink>::write(os_, get().data(), get().size());
 	get().clear();
 	if (r <= 0)
 	    break;
     }
-    OutStreamAdapter<Stream>::finish(os_);
+    OutStreamAdapter<Sink>::finish(os_);
     ZSTD_freeCStream(zsc_);
     zsc_ = nullptr;
 }

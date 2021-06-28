@@ -39,9 +39,7 @@ void Compressor<Sink>::close() {
 		(fmt::format("BZ2_bzCompress(stream, BZ_FINISH): failed with {}", rc));
 
 	get_.update();
-	
-	auto data = get_.view();
-	sink_.write(data.data(), data.size());
+	sink_.write(get_.data(), get_.size());
 	
 	if (rc == BZ_STREAM_END)
 	    break;
@@ -64,8 +62,7 @@ void Compressor<Sink>::write(const char *input, size_t input_len) {
 	if (rc != BZ_RUN_OK)
 	    throw std::runtime_error
 		(fmt::format("BZ2_bzCompress: failed with {}", rc));
-	auto data = get_.view();
-	sink_.write(data.data(), data.size());
+	sink_.write(get_.data(), get_.size());
     }
 }
 

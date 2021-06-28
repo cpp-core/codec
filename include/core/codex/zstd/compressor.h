@@ -23,13 +23,13 @@ namespace zstd
 // 2. Implement a specialization of `zstd::InStreamadapter` with the
 // required `write` method.
 //
-template<class Stream>
+template<class Sink>
 class Compressor {
 public:
     // Construct a compressor that will write to the output stream
     // <os> using a buffer of size `n` (defaults to size suggested by
     // ZSTD library).
-    Compressor(Stream& os, size_t n = 0);
+    Compressor(Sink& os, size_t n = 0);
 
     // Flush any remaining data to the output stream <os> and cleanup
     // internal allocations.
@@ -42,17 +42,17 @@ public:
     // Return the number of bytes appended to the output stream.
     size_t count() const { return count_; }
 
-    // Write any data in the put area to the output `Stream` using
-    // ZSTD streaming compression.
-    void write();
-
-    // Write the data from `begin` up to `end` to the output `Stream`
-    // using ZSTD streaming compression.
+    // Write the data from `begin` up to `end` to `Sink` using ZSTD
+    // streaming compression.
     void write(const char *begin, const char *end);
 
-    // Write the data from `begin` to `begin` + `count` to the output
-    // `Stream` using ZSTD streaming compression.
+    // Write the data from `begin` to `begin` + `count` to `Sink`
+    // using ZSTD streaming compression.
     void write(const char *begin, size_t count) { write(begin, begin + count); }
+
+    // Write the raw bytes representing the pod-type `value` to the `Sink`.
+    template<class T>
+    void write_pod(T& value) { write(reinterpret_cast<const char*>(&value), sizeof(T)); }
 
     // Return a reference to the put area for writing data.
     UnbufferedPutArea& put() { return put_; }
@@ -67,7 +67,7 @@ public:
     const GetArea& get() const { return get_; }
 
 private:
-    Stream& os_;
+    Sink& os_;
     ZSTD_CStream *zsc_;
     UnbufferedPutArea put_;
     GetArea get_;

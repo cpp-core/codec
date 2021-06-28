@@ -30,6 +30,9 @@ public:
     // Return a view of the available characters.
     string_view view() const { return {ptr_, (size_t)(end_ - ptr_)}; }
 
+    // Return a pointer to the first available character.
+    const char *data() const { return ptr_; }
+
     // Return the current character and advance to the next character.
     char consume() { return *ptr_++; }
 

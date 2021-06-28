@@ -35,13 +35,13 @@ namespace zstd
 // while (d.underflow())
 //     s += string_view{d.get().ptr_base(), d.get().ptr_position()};
 // 
-template<class Stream>
+template<class Source>
 class Decompressor {
 public:
     // Construct a decompressor that reads from stream `is` using a
     // buffer of size `n` (defaults to the buffer size suggested by
     // the ZSTD library).
-    Decompressor(Stream& is, size_t n = 0);
+    Decompressor(Source& is, size_t n = 0);
 
     // Destruct a decompressor.
     ~Decompressor();
@@ -88,7 +88,7 @@ private:
     // Return a reference to tht put area for writing data.
     const PutArea& put() const { return put_; }
 
-    Stream& is_;
+    Source& is_;
     ZSTD_DStream *zsd_;
     PutArea put_;
     GetArea get_;
