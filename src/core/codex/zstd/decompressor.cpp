@@ -63,13 +63,13 @@ bool Decompressor<Stream>::underflow() {
 	    }
 	}
 
-	get().clear_pre();
+	get().clear();
 						   
 	auto r = ZSTD_decompressStream(zsd_, get().buffer(), put().buffer());
 	if (ZSTD_isError(r))
 	    throw zstd::error("read: %s", ZSTD_getErrorName(r));
 						   
-	get().update_post();
+	get().update();
 
 	if (get().available())
 	    return true;

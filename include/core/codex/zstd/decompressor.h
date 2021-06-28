@@ -2,7 +2,8 @@
 //
 
 #pragma once
-#include "core/codex/zstd/area.h"
+#include "core/codex/zstd/get_area.h"
+#include "core/codex/zstd/put_area.h"
 
 namespace zstd
 {
@@ -82,14 +83,14 @@ public:
 
 private:
     // Return a reference to the put area for writing data.
-    StreamPutArea& put() { return put_; }
+    PutArea& put() { return put_; }
 
     // Return a reference to tht put area for writing data.
-    const StreamPutArea& put() const { return put_; }
+    const PutArea& put() const { return put_; }
 
     Stream& is_;
     ZSTD_DStream *zsd_;
-    StreamPutArea put_;
+    PutArea put_;
     GetArea get_;
 };
 

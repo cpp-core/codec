@@ -6,7 +6,8 @@
 #include <type_traits>
 #include <zstd.h>
 #include "core/common.h"
-#include "core/codex/zstd/area.h"
+#include "core/codex/zstd/get_area.h"
+#include "core/codex/zstd/put_area.h"
 #include "core/codex/zstd/exception.h"
 
 namespace zstd
@@ -54,22 +55,22 @@ public:
     void write(const char *begin, size_t count) { write(begin, begin + count); }
 
     // Return a reference to the put area for writing data.
-    PutArea& put() { return put_; }
+    UnbufferedPutArea& put() { return put_; }
 
     // Return a reference to the put area for writing data.
-    const PutArea& put() const { return put_; }
+    const UnbufferedPutArea& put() const { return put_; }
 
     // Return a reference to the get area for reading data.
-    ZstdGetArea& get() { return get_; }
+    GetArea& get() { return get_; }
 
     // Return a reference to the get area for reading data.
-    const ZstdGetArea& get() const { return get_; }
+    const GetArea& get() const { return get_; }
 
 private:
     Stream& os_;
     ZSTD_CStream *zsc_;
-    PutArea put_;
-    ZstdGetArea get_;
+    UnbufferedPutArea put_;
+    GetArea get_;
     size_t count_{0};
 };
 

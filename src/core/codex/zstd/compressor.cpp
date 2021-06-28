@@ -28,14 +28,15 @@ template<class Stream>
 void Compressor<Stream>::write() {
     if (zsc_ == nullptr)
 	throw zstd::error("attempt to write to closed stream");
-    
+
     while (not put().empty()) {
-	auto r = ZSTD_compressStream(zsc_, get().zbuffer(), put().buffer());
+	auto r = ZSTD_compressStream(zsc_, get().buffer(), put().buffer());
 	if (ZSTD_isError(r))
 	    throw zstd::error("write: ", ZSTD_getErrorName(r));
-	OutStreamAdapter<Stream>::write(os_, get().ptr_base(), get().position());
-	count_ += get().position();
-	get().reset();
+	get().update();
+	OutStreamAdapter<Stream>::write(os_, get().view().data(), get().view().size());
+	count_ += get().view().size();
+	get().clear();
     }
     put().clear();
 }
@@ -52,11 +53,12 @@ void Compressor<Stream>::close() {
 	throw zstd::error("attempt to close already closed stream");
     
     while (true) {
-	auto r = ZSTD_endStream(zsc_, get().zbuffer());
+	auto r = ZSTD_endStream(zsc_, get().buffer());
 	if (ZSTD_isError(r))
 	    throw zstd::error("close: %s", ZSTD_getErrorName(r));
-	OutStreamAdapter<Stream>::write(os_, get().ptr_base(), get().position());
-	get().reset();
+	get().update();
+	OutStreamAdapter<Stream>::write(os_, get().view().data(), get().view().size());
+	get().clear();
 	if (r <= 0)
 	    break;
     }
