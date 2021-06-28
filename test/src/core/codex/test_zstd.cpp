@@ -40,6 +40,41 @@ TEST(ZSTD, Basic)
     }
 }
 
+TEST(ZSTD, Pods)
+{
+    std::stringstream ss;
+    zstd::Compressor c{ss, 2};
+
+    int a = -42;
+    int64 b = -37;
+    float x = -1.0;
+    double y = -2.0;
+    c.write_pod(a);
+    c.write_pod(b);
+    c.write_pod(x);
+    c.write_pod(y);
+    c.close();
+
+    zstd::Decompressor d{ss, 2};
+    int a2;
+    int64 b2;
+    float x2;
+    double y2;
+    
+    EXPECT_TRUE(d.read_pod(a2));
+    EXPECT_EQ(a2, a);
+    
+    EXPECT_TRUE(d.read_pod(b2));
+    EXPECT_EQ(b2, b);
+    
+    EXPECT_TRUE(d.read_pod(x2));
+    EXPECT_EQ(x2, x);
+    
+    EXPECT_TRUE(d.read_pod(y2));
+    EXPECT_EQ(y2, y);
+}
+
+
 TEST(ZSTD, String)
 {
     auto gsize = cr::uniform(0, 1024);
