@@ -1,6 +1,7 @@
 // Copyright (C) 2021 by Mark Melton
 //
 
+#pragma once
 #include "core/common.h"
 
 namespace core {
@@ -15,10 +16,14 @@ public:
     
     int underflow() {
 	if (this->gptr() == this->egptr()) {
+	    line_.clear();
 	    while (std::getline(sin_, line_)) {
-		if (not filter_(line_))
+		if (sin_)
+		    line_ += "\n";
+		if (not filter_(line_)) {
+		    line_.clear();
 		    continue;
-		line_ += "\n";
+		}
 		break;
 	    }
 
