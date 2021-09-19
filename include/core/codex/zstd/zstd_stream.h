@@ -1,6 +1,7 @@
 // Copyright (C) 2021 by Mark Melton
 //
 
+#include <fstream>
 #include "core/codex/zstd/decompressor.h"
 #include "core/codex/zstd/compressor.h"
 #include "core/codex/util/buffer.h"
@@ -88,6 +89,22 @@ public:
     }
 
 private:
+};
+
+struct ofstream_wrapper {
+    ofstream_wrapper(const string& filename)
+	: ofs(filename) {
+    }
+    std::ofstream ofs;
+};
+
+template<class CharT = char, class TraitT = std::char_traits<CharT>>
+class zstd_ofstream : private ofstream_wrapper, public zstd_ostream<CharT, TraitT> {
+public:
+    zstd_ofstream(const string& filename, size_t n = 0)
+	: ofstream_wrapper(filename)
+	, zstd_ostream<CharT, TraitT>(ofstream_wrapper::ofs, n) {
+    }
 };
 
 }; // ns core
