@@ -8,6 +8,7 @@
 #include "core/codex/zstd/compress.h"
 #include "core/codex/zstd/decompress.h"
 #include "core/codex/zstd/decompress_to.h"
+#include "core/codex/zstd/zstd_fstream.h"
 #include "core/concurrent/scoped_task.h"
 #include "core/concurrent/queue/lockfree_spsc.h"
 #include "core/concurrent/queue/sink_spsc.h"
@@ -137,6 +138,22 @@ TEST(ZSTD, Container)
 	zstd::decompress_to(connector, new_vec);
 	
 	// EXPECT_EQ(new_vec, str);
+    }
+}
+
+TEST(ZSTD, FileStream)
+{
+    const string file = "/tmp/x.dat";
+    {
+	string line = "abc\n";
+	core::zstd_ofstream zofs{file};
+	zofs.write(line.c_str(), line.size());
+    }
+    {
+	string line;
+	core::zstd_ifstream zifs{file};
+	std::getline(zifs, line);
+	EXPECT_EQ(line, "abc");
     }
 }
 
