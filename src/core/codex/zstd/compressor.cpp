@@ -2,6 +2,7 @@
 //
 
 #include <sstream>
+#include <fstream>
 #include "core/codex/zstd/compressor.h"
 #include "core/codex/zstd/adapter.h"
 #include "core/concurrent/queue/lockfree_spsc.h"
@@ -64,6 +65,7 @@ void Compressor<Sink>::close() {
 }
 
 template class Compressor<std::ostream>;
+template class Compressor<std::ofstream>;
 template class Compressor<std::stringstream>;
 template class Compressor<core::mt::queue::LockFreeSpSc<char>>;
 template class Compressor<core::mt::queue::SinkSpSc<char>>;

@@ -2,6 +2,7 @@
 //
 
 #include <sstream>
+#include <fstream>
 #include <zstd.h>
 #include "core/codex/zstd/decompressor.h"
 #include "core/codex/zstd/adapter.h"
@@ -103,6 +104,7 @@ void Decompressor<Source>::close() {
 }
 
 template class Decompressor<std::istream>;
+template class Decompressor<std::ifstream>;
 template class Decompressor<std::stringstream>;
 template class Decompressor<core::mt::queue::LockFreeSpSc<char>>;
 template class Decompressor<core::mt::queue::SourceSpSc<char>>;
