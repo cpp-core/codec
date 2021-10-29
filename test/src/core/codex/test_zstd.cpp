@@ -148,6 +148,23 @@ TEST(ZSTD, FileStream)
     const string file = "/tmp/x.dat";
     {
 	string line = "abc\n";
+	core::zstd_ofstream zofs{file};
+	zofs.write(line.data(), line.size());
+    }
+    {
+	string line;
+	core::zstd_ifstream zifs{file};
+	auto r = (bool)std::getline(zifs, line);
+	EXPECT_TRUE(r);
+	EXPECT_EQ(line, "abc");
+    }
+}
+
+TEST(ZSTD, FileDecompressor)
+{
+    const string file = "/tmp/x.dat";
+    {
+	string line = "abc\n";
 	zstd::FileCompressor zofs{file};
 	zofs.write(line.data(), line.size());
     }
