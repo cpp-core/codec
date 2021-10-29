@@ -3,11 +3,13 @@
 
 #include <gtest/gtest.h>
 #include <range/v3/view/take.hpp>
-#include "core/codex/zstd/compressor.h"
-#include "core/codex/zstd/decompressor.h"
 #include "core/codex/zstd/compress.h"
+#include "core/codex/zstd/compressor.h"
 #include "core/codex/zstd/decompress.h"
 #include "core/codex/zstd/decompress_to.h"
+#include "core/codex/zstd/decompressor.h"
+#include "core/codex/zstd/file_compressor.h"
+#include "core/codex/zstd/file_decompressor.h"
 #include "core/codex/zstd/zstd_fstream.h"
 #include "core/concurrent/scoped_task.h"
 #include "core/concurrent/queue/lockfree_spsc.h"
@@ -146,13 +148,14 @@ TEST(ZSTD, FileStream)
     const string file = "/tmp/x.dat";
     {
 	string line = "abc\n";
-	core::zstd_ofstream zofs{file};
-	zofs.write(line.c_str(), line.size());
+	zstd::FileCompressor zofs{file};
+	zofs.write(line.data(), line.size());
     }
     {
 	string line;
-	core::zstd_ifstream zifs{file};
-	std::getline(zifs, line);
+	zstd::FileDecompressor zifs{file};
+	auto r = zifs.read_line(line);
+	EXPECT_TRUE(r);
 	EXPECT_EQ(line, "abc");
     }
 }
