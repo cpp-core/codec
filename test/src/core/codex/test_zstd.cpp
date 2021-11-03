@@ -1,6 +1,7 @@
 // Copyright 2018, 2019, 2021 by Mark Melton
 //
 
+#include <filesystem>
 #include <gtest/gtest.h>
 #include <range/v3/view/take.hpp>
 #include "core/codex/zstd/compress.h"
@@ -17,16 +18,42 @@
 #include "core/concurrent/queue/source_spsc.h"
 #include "core/range/sample.h"
 #include "core/range/string.h"
+#include "coro/stream/stream.h"
 
 static const size_t NumberSamples = 32;
 
-TEST(ZSTD, Basic)
+using namespace costr;
+namespace fs = std::filesystem;
+
+class Environment : public ::testing::Environment {
+public:
+    Environment()
+	: root_(fs::temp_directory_path()) {
+	root_ += fmt::format("/path.{}", getpid());
+    }
+    ~Environment() override { }
+    void SetUp() override { fs::create_directories(root_); }
+    void TearDown() override { fs::remove_all(root_); }
+
+    string tmpfile() {
+	++counter_;
+	return fmt::format("{}/{}", root_, counter_);
+    }
+    
+private:
+    size_t counter_{0};
+    string root_;
+	
+};
+
+Environment *env{nullptr};
+
+TEST(Zstd, Basic)
 {
-    auto gsize = cr::uniform(0, 1024);
-    auto generator = cr::str::alpha(gsize);
-    for (auto str : generator | v::take(1)) {
-	std::stringstream ss;
-	zstd::Compressor c{ss, 64};
+    auto g = str::alpha();
+    for (auto str : take(std::move(g), NumberSamples / 4)) {
+	auto file = env->tmpfile();
+	zstd::Compressor c{std::ofstream{file}, 64};
 
 	for (auto i = 0ul; i < str.size(); i += 1024) {
 	    auto edx = std::min(i + 1024, str.size());
@@ -34,7 +61,7 @@ TEST(ZSTD, Basic)
 	}
 	c.close();
 
-	zstd::Decompressor d{ss, 64};
+	zstd::Decompressor d{std::ifstream{file}, 64};
 	string ustr;
 	while (d.underflow())
 	    ustr += d.view();
@@ -43,7 +70,7 @@ TEST(ZSTD, Basic)
     }
 }
 
-TEST(ZSTD, Pods)
+TEST(Zstd, Pods)
 {
     std::stringstream ss;
     zstd::Compressor c{ss, 2};
@@ -78,24 +105,20 @@ TEST(ZSTD, Pods)
 }
 
 
-TEST(ZSTD, String)
+TEST(Zstd, String)
 {
-    auto gsize = cr::uniform(0, 1024);
-    auto generator = cr::str::any(gsize);
-    for (auto str : generator | v::take(NumberSamples))
-    {
+    auto g = str::any(0, 1024);
+    for (auto str : take(std::move(g), NumberSamples)) {
 	auto zstr = zstd::compress(str);
 	auto ustr = zstd::decompress(zstr);
 	EXPECT_EQ(str, ustr);
     }
 }
 
-TEST(ZSTD, Stream)
+TEST(Zstd, Stream)
 {
-    auto gsize = cr::uniform(0, 1024);
-    auto generator = cr::str::any(gsize);
-    for (auto str : generator | v::take(NumberSamples))
-    {
+    auto g = str::any(0, 1024);
+    for (auto str : take(std::move(g), NumberSamples)) {
 	std::stringstream ss;
 	
 	core::mt::queue::SourceSpSc<char> source(str);
@@ -108,12 +131,10 @@ TEST(ZSTD, Stream)
     }
 }
 
-TEST(ZSTD, Queue)
+TEST(Zstd, Queue)
 {
-    auto gsize = cr::uniform(0, 1024);
-    auto generator = cr::str::any(gsize);
-    for (auto str : generator | v::take(NumberSamples))
-    {
+    auto g = str::any(0, 1024);
+    for (auto str : take(std::move(g), NumberSamples)) {
 	core::mt::queue::SourceSpSc<char> source(str);
 	core::mt::queue::SinkSpSc<char> sink;
 	core::mt::queue::LockFreeSpSc<char> connector;
@@ -126,12 +147,10 @@ TEST(ZSTD, Queue)
     }
 }
 
-TEST(ZSTD, Container)
+TEST(Zstd, Container)
 {
-    auto gsize = cr::uniform(0, 1024);
-    auto generator = cr::str::any(gsize);
-    for (auto str : generator | v::take(NumberSamples))
-    {
+    auto g = str::any(0, 1024);
+    for (auto str : take(std::move(g), NumberSamples)) {
 	core::mt::queue::SourceSpSc<char> source(str);
 	core::mt::queue::LockFreeSpSc<char> connector;
 	zstd::compress(source, connector);
@@ -143,9 +162,9 @@ TEST(ZSTD, Container)
     }
 }
 
-TEST(ZSTD, FileStream)
+TEST(Zstd, FileStream)
 {
-    const string file = "/tmp/x.dat";
+    const string file = env->tmpfile();
     {
 	string line = "abc\n";
 	core::zstd_ofstream zofs{file};
@@ -160,9 +179,9 @@ TEST(ZSTD, FileStream)
     }
 }
 
-TEST(ZSTD, FileDecompressor)
+TEST(Zstd, FileDecompressor)
 {
-    const string file = "/tmp/x.dat";
+    const string file = env->tmpfile();
     {
 	string line = "abc\n";
 	zstd::FileCompressor zofs{file};
@@ -180,6 +199,8 @@ TEST(ZSTD, FileDecompressor)
 int main(int argc, char *argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
+    env = new Environment{};
+    AddGlobalTestEnvironment(env);
     return RUN_ALL_TESTS();
 }
 

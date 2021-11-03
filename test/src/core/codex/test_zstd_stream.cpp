@@ -12,7 +12,7 @@
 
 static const int NumberSamples = 64;
 
-TEST(Stream, Zstd)
+TEST(Zstd, Stream)
 {
     auto gsize = cr::uniform(0, 1024);
     auto generator = cr::str::alpha(gsize);
