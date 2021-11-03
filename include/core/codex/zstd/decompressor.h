@@ -46,6 +46,9 @@ public:
     // Destruct a decompressor.
     ~Decompressor();
 
+    // Move construct from other.
+    Decompressor(Decompressor&& other);
+
     // Free resources and close the underlying stream.
     void close();
 

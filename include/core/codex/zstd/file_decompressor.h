@@ -14,7 +14,12 @@ public:
     
     FileDecompressor(const string& file)
 	: std::ifstream(file)
-	, Base(*(std::ifstream*)this) {
+	, Base(*static_cast<std::ifstream*>(this)) {
+    }
+
+    FileDecompressor(FileDecompressor&& other)
+	: std::ifstream(std::move(static_cast<std::ifstream&>(other)))
+	, Base(std::move(static_cast<Base&>(other))) {
     }
 };
 

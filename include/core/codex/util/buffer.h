@@ -2,6 +2,7 @@
 //
 
 #pragma once
+#include <utility>
 #include "core/common.h"
 
 namespace core
@@ -16,6 +17,12 @@ class BufferedArea {
 	: capacity_(capacity)
 	, block_(std::make_unique<char[]>(capacity_))
     { }
+
+    // Move from another buffer.
+    BufferedArea(BufferedArea&& other) noexcept {
+	std::swap(capacity_, other.capacity_);
+	std::swap(block_, other.block_);
+    }
 
     // Return a pointer to the start of the buffer.
     char *begin() { return block_.get(); }
