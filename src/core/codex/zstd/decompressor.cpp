@@ -28,6 +28,14 @@ Decompressor<Source>::~Decompressor() {
 }
 
 template<class Source>
+Decompressor<Source>::Decompressor(Decompressor&& other)
+    : is_(other.is_)
+    , zsd_(std::exchange(other.zsd_, nullptr))
+    , put_(std::move(other.put_))
+    , get_(std::move(other.get_)) {
+}
+
+template<class Source>
 bool Decompressor<Source>::read_line(string& line) {
     line.clear();
     
