@@ -19,7 +19,7 @@ public:
 
     FileDecompressor(FileDecompressor&& other)
 	: std::ifstream(std::move(static_cast<std::ifstream&>(other)))
-	, Base(std::move(static_cast<Base&>(other))) {
+	, Base(std::move(static_cast<Base&>(other)), *static_cast<std::ifstream*>(this)) {
     }
 };
 

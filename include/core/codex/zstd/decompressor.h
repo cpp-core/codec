@@ -46,6 +46,9 @@ public:
     // Destruct a decompressor.
     ~Decompressor();
 
+    // Move construct from other adjusting source reference.
+    Decompressor(Decompressor&& other, Source& is);
+
     // Move construct from other.
     Decompressor(Decompressor&& other);
 

@@ -28,8 +28,8 @@ Decompressor<Source>::~Decompressor() {
 }
 
 template<class Source>
-Decompressor<Source>::Decompressor(Decompressor&& other)
-    : is_(other.is_)
+Decompressor<Source>::Decompressor(Decompressor&& other, Source& is)
+    : is_(is)
     , zsd_(std::exchange(other.zsd_, nullptr))
     , put_(std::move(other.put_))
     , get_(std::move(other.get_)) {
