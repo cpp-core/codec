@@ -41,16 +41,16 @@ public:
     // Construct a decompressor that reads from stream `is` using a
     // buffer of size `n` (defaults to the buffer size suggested by
     // the ZSTD library).
-    Decompressor(Source& is, size_t n = 0);
+    explicit Decompressor(std::add_rvalue_reference_t<Source> is, size_t n = 0);
 
     // Destruct a decompressor.
     ~Decompressor();
 
-    // Move construct from other adjusting source reference.
-    Decompressor(Decompressor&& other, Source& is);
-
     // Move construct from other.
     Decompressor(Decompressor&& other);
+
+    // Move construct from other adjusting source reference.
+    Decompressor(Decompressor&& other, Source& is);
 
     // Free resources and close the underlying stream.
     void close();
@@ -94,11 +94,13 @@ private:
     // Return a reference to tht put area for writing data.
     const PutArea& put() const { return put_; }
 
-    Source& is_;
+    Source is_;
     ZSTD_DStream *zsd_;
     PutArea put_;
     GetArea get_;
 };
 
+template<class S> explicit Decompressor(S&&) -> Decompressor<S>;
+template<class S> explicit Decompressor(S&&, size_t) -> Decompressor<S>;
 
 }; // zstd

@@ -14,8 +14,8 @@ namespace zstd
 {
 
 template<class Source>
-Decompressor<Source>::Decompressor(Source& is, size_t n)
-    : is_(is)
+Decompressor<Source>::Decompressor(std::add_rvalue_reference_t<Source> is, size_t n)
+    : is_(std::forward<Source>(is))
     , zsd_(ZSTD_createDStream())
     , put_(n > 0 ? n : ZSTD_DStreamInSize())
     , get_(n > 0 ? n : ZSTD_DStreamOutSize())
@@ -28,8 +28,16 @@ Decompressor<Source>::~Decompressor() {
 }
 
 template<class Source>
+Decompressor<Source>::Decompressor(Decompressor&& other)
+    : is_(std::forward<Source>(other.is_))
+    , zsd_(std::exchange(other.zsd_, nullptr))
+    , put_(std::move(other.put_))
+    , get_(std::move(other.get_)) {
+}
+
+template<class Source>
 Decompressor<Source>::Decompressor(Decompressor&& other, Source& is)
-    : is_(is)
+    : is_(std::forward<Source>(is))
     , zsd_(std::exchange(other.zsd_, nullptr))
     , put_(std::move(other.put_))
     , get_(std::move(other.get_)) {
@@ -111,11 +119,13 @@ void Decompressor<Source>::close() {
     zsd_ = nullptr;
 }
 
-template class Decompressor<std::istream>;
+template class Decompressor<std::istream&>;
+template class Decompressor<std::ifstream&>;
+template class Decompressor<std::stringstream&>;
+template class Decompressor<core::mt::queue::LockFreeSpSc<char>&>;
+template class Decompressor<core::mt::queue::SourceSpSc<char>&>;
+
 template class Decompressor<std::ifstream>;
-template class Decompressor<std::stringstream>;
-template class Decompressor<core::mt::queue::LockFreeSpSc<char>>;
-template class Decompressor<core::mt::queue::SourceSpSc<char>>;
 
 }; // zstd
 

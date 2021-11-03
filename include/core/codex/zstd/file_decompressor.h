@@ -8,19 +8,17 @@
 namespace zstd
 {
 
-class FileDecompressor : private std::ifstream, public Decompressor<std::ifstream> {
+class FileDecompressor : public Decompressor<std::ifstream> {
 public:
     using Base = Decompressor<std::ifstream>;
-    
     FileDecompressor(const string& file)
-	: std::ifstream(file)
-	, Base(*static_cast<std::ifstream*>(this)) {
+	: Base(std::ifstream{file}) {
     }
 
-    FileDecompressor(FileDecompressor&& other)
-	: std::ifstream(std::move(static_cast<std::ifstream&>(other)))
-	, Base(std::move(static_cast<Base&>(other)), *static_cast<std::ifstream*>(this)) {
+    FileDecompressor(FileDecompressor&& other) 
+	: Base(std::move(other)) {
     }
+private:
 };
 
 }; // zstd

@@ -30,7 +30,10 @@ struct InStreamAdapter<T> {
 template<class T>
 struct OutStreamAdapter {
     static void write(T& os, const char *ptr, size_t count) { os.write(ptr, count); }
-    static void finish(T& queue) { }
+    static void finish(T& os) {
+	if constexpr (requires(T a) { a.close(); })
+			 os.close();
+    }
 };
 
 template<class T>

@@ -8,14 +8,17 @@
 namespace zstd
 {
 
-class FileCompressor : private std::ofstream, public Compressor<std::ofstream> {
+class FileCompressor : public Compressor<std::ofstream> {
 public:
     using Base = Compressor<std::ofstream>;
     using Base::write;
     
     FileCompressor(const string& file)
-	: std::ofstream(file)
-	, Base(*(std::ofstream*)this) {
+	: Base(std::ofstream{file}) {
+    }
+
+    FileCompressor(FileCompressor&& other)
+	: Base(std::move(other)) {
     }
 };
 

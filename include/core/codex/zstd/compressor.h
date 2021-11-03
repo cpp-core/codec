@@ -29,7 +29,10 @@ public:
     // Construct a compressor that will write to the output stream
     // <os> using a buffer of size `n` (defaults to size suggested by
     // ZSTD library).
-    Compressor(Sink& os, size_t n = 0);
+    explicit Compressor(std::add_rvalue_reference_t<Sink> os, size_t n = 0);
+
+    // Move construct from other.
+    Compressor(Compressor&& other);
 
     // Flush any remaining data to the output stream <os> and cleanup
     // internal allocations.
@@ -67,11 +70,14 @@ public:
     const GetArea& get() const { return get_; }
 
 private:
-    Sink& os_;
+    Sink os_;
     ZSTD_CStream *zsc_;
     UnbufferedPutArea put_;
     GetArea get_;
     size_t count_{0};
 };
+
+template<class S> explicit Compressor(S&&) -> Compressor<S>;
+template<class S> explicit Compressor(S&&, size_t) -> Compressor<S>;
 
 }; // zstd

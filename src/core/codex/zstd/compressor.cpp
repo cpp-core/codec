@@ -13,11 +13,20 @@ namespace zstd
 {
 
 template<class Sink>
-Compressor<Sink>::Compressor(Sink& os, size_t n)
-    : os_(os)
+Compressor<Sink>::Compressor(std::add_rvalue_reference_t<Sink> os, size_t n)
+    : os_(std::forward<Sink>(os))
     , zsc_(ZSTD_createCStream())
     , get_(n > 0 ? n : ZSTD_CStreamOutSize())
 { }
+
+template<class Sink>
+Compressor<Sink>::Compressor(Compressor&& other)
+    : os_(std::forward<Sink>(other.os_))
+    , zsc_(std::exchange(other.zsc_, nullptr))
+    , put_(std::move(other.put_))
+    , get_(std::move(other.get_))
+    , count_(other.count_) {
+}
 
 template<class Sink>
 Compressor<Sink>::~Compressor() {
@@ -64,11 +73,13 @@ void Compressor<Sink>::close() {
     zsc_ = nullptr;
 }
 
-template class Compressor<std::ostream>;
+template class Compressor<std::ostream&>;
+template class Compressor<std::ofstream&>;
+template class Compressor<std::stringstream&>;
+template class Compressor<core::mt::queue::LockFreeSpSc<char>&>;
+template class Compressor<core::mt::queue::SinkSpSc<char>&>;
+
 template class Compressor<std::ofstream>;
-template class Compressor<std::stringstream>;
-template class Compressor<core::mt::queue::LockFreeSpSc<char>>;
-template class Compressor<core::mt::queue::SinkSpSc<char>>;
 
 }; // zstd
 

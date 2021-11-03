@@ -28,7 +28,7 @@ public:
     }
     
 private:
-    zstd::Decompressor<std::istream> d_;
+    zstd::Decompressor<std::istream&> d_;
 };
 
 template<class CharT = char, class TraitT = std::char_traits<CharT>>
@@ -72,7 +72,7 @@ private:
 	setp(area_.begin(), area_.end() - 1);
     }
     
-    zstd::Compressor<std::ostream> c_;
+    zstd::Compressor<std::ostream&> c_;
     core::BufferedArea area_;
 };
 
