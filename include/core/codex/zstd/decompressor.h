@@ -52,6 +52,9 @@ public:
     // Move construct from other adjusting source reference.
     Decompressor(Decompressor&& other, Source& is);
 
+    // Return a reference to the underlying stream.
+    Source& stream() { return is_; }
+    
     // Free resources and close the underlying stream.
     void close();
 

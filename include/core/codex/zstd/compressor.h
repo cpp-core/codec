@@ -38,6 +38,9 @@ public:
     // internal allocations.
     ~Compressor();
 
+    // Return a reference to the underlying stream.
+    Sink& stream() { return os_; }
+
     // Flush any remaining data to the output stream <os> and cleanup
     // internal allocations.
     void close();
