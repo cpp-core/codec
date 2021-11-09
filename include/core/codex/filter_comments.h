@@ -7,7 +7,7 @@
 
 namespace core {
 
-auto filter_comments(std::istream& is) {
+inline auto filter_comments(std::istream& is) {
     std::regex comment("^[ \t]*//");
     return core::filter_istream(is, [=](string_view s) {
 	return not std::regex_search(s.data(), comment);
