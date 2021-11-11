@@ -22,7 +22,7 @@
 
 static const size_t NumberSamples = 32;
 
-using namespace costr;
+using namespace coro;
 namespace fs = std::filesystem;
 
 class Environment : public ::testing::Environment {
