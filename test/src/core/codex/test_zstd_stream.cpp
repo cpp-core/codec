@@ -1,23 +1,17 @@
-// Copyright 2018, 2019, 2021 by Mark Melton
+// Copyright 2018, 2019, 2021, 2022 by Mark Melton
 //
 
 #include <gtest/gtest.h>
-#include <range/v3/view/take.hpp>
 #include <sstream>
 #include "core/codex/zstd/compress.h"
 #include "core/codex/zstd/zstd_stream.h"
-#include "core/range/sample.h"
-#include "core/range/string.h"
-#include "range/boolean.h"
+#include "coro/stream/stream.h"
 
 static const int NumberSamples = 64;
 
 TEST(Zstd, Stream)
 {
-    auto gsize = cr::uniform(0, 1024);
-    auto generator = cr::str::alpha(gsize);
-    for (auto str : generator | v::take(NumberSamples))
-    {
+    for (auto str : coro::str::alpha(0, 1024) | coro::take(NumberSamples)) {
 	std::stringstream ss;
 	{
 	    core::zstd_ostream zout(ss, 32);

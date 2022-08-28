@@ -1,13 +1,11 @@
-// Copyright 2018, 2019, 2021 by Mark Melton
+// Copyright 2018, 2019, 2021, 2022 by Mark Melton
 //
 
 #include <gtest/gtest.h>
-#include <range/v3/view/take.hpp>
 #include <sstream>
 #include "core/codex/filter.h"
 #include "core/codex/filter_comments.h"
-#include "core/range/sample.h"
-#include "core/range/string.h"
+#include "coro/stream/stream.h"
 
 static const int NumberSamples = 64;
 
@@ -18,11 +16,8 @@ TEST(Codex, Filter)
     
     for (auto i = 0; i < NumberSamples; ++i) {
 	string lines;
-	auto gsize = cr::uniform(0, MaxLineSize);
-	auto generator = cr::str::alpha(gsize);
-
 	uint expected_count{0};
-	for (auto str : generator | v::take(MaxLineSize)) {
+	for (auto str : coro::str::alpha(0, MaxLineSize) | coro::take(MaxLineSize)) {
 	    str += '\n';
 	    if (str.size() < LineFilter) {
 		++expected_count;

@@ -1,8 +1,7 @@
-// Copyright 2018, 2019, 2021 by Mark Melton
+// Copyright 2018, 2019, 2021, 2022 by Mark Melton
 //
 
 #include <gtest/gtest.h>
-#include <range/v3/view/take.hpp>
 #include "core/codex/bzip/compress.h"
 #include "core/codex/bzip/compressor.h"
 #include "core/codex/bzip/decompress.h"
@@ -11,16 +10,13 @@
 #include "core/concurrent/queue/lockfree_spsc.h"
 #include "core/concurrent/queue/sink_spsc.h"
 #include "core/concurrent/queue/source_spsc.h"
-#include "core/range/sample.h"
-#include "core/range/string.h"
+#include "coro/stream/stream.h"
 
 static const size_t NumberSamples = 1;
 
 TEST(Bzip, Basic)
 {
-    auto gsize = cr::uniform(0, 4096);
-    auto generator = cr::str::alpha(gsize);
-    for (auto str : generator | v::take(NumberSamples)) {
+    for (auto str : coro::str::alpha(0, 4096) | coro::take(NumberSamples)) {
 	std::stringstream ss;
 	bzip::Compressor c{ss, 64};
 	
@@ -76,10 +72,7 @@ TEST(Bzip, Pods)
 
 TEST(Bzip, Strings)
 {
-    auto gsize = cr::uniform(0, 1024);
-    auto generator = cr::str::any(gsize);
-    for (auto str : generator | v::take(NumberSamples))
-    {
+    for (auto str : coro::sampler<string>(0, 1024) | coro::take(NumberSamples)) {
 	auto zstr = bzip::compress(str);
 	auto ustr = bzip::decompress(zstr);
 	EXPECT_EQ(str, ustr);

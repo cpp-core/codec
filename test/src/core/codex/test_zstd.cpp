@@ -1,9 +1,8 @@
-// Copyright 2018, 2019, 2021 by Mark Melton
+// Copyright 2018, 2019, 2021, 2022 by Mark Melton
 //
 
 #include <filesystem>
 #include <gtest/gtest.h>
-#include <range/v3/view/take.hpp>
 #include "core/codex/zstd/compress.h"
 #include "core/codex/zstd/compressor.h"
 #include "core/codex/zstd/decompress.h"
@@ -16,8 +15,6 @@
 #include "core/concurrent/queue/lockfree_spsc.h"
 #include "core/concurrent/queue/sink_spsc.h"
 #include "core/concurrent/queue/source_spsc.h"
-#include "core/range/sample.h"
-#include "core/range/string.h"
 #include "coro/stream/stream.h"
 
 static const size_t NumberSamples = 32;
