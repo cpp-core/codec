@@ -1,10 +1,10 @@
-// Copyright (C) 2018, 2019 by Mark Melton
+// Copyright (C) 2018, 2019, 2022 by Mark Melton
 //
 
 #pragma once
 #include <zstd.h>
 #include <fmt/printf.h>
-#include "core/common.h"
+#include "core/utility/common.h"
 
 namespace zstd
 {

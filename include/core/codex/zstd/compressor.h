@@ -1,11 +1,11 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #pragma once
 #include <memory>
 #include <type_traits>
 #include <zstd.h>
-#include "core/common.h"
+#include "core/utility/common.h"
 #include "core/codex/zstd/get_area.h"
 #include "core/codex/zstd/put_area.h"
 #include "core/codex/zstd/exception.h"
