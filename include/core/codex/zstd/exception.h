@@ -4,7 +4,7 @@
 #pragma once
 #include <zstd.h>
 #include <fmt/printf.h>
-#include "core/utility/common.h"
+#include "core/util/common.h"
 
 namespace zstd
 {

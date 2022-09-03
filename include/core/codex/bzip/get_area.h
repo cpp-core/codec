@@ -2,7 +2,7 @@
 //
 
 #pragma once
-#include "core/utility/common.h"
+#include "core/util/common.h"
 #include "core/codex/util/get_area.h"
 
 namespace bzip {

@@ -3,7 +3,7 @@
 
 #pragma once
 #include <ostream>
-#include "core/utility/common.h"
+#include "core/util/common.h"
 
 namespace zstd
 {
