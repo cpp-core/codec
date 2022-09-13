@@ -4,8 +4,8 @@
 #pragma once
 #include <istream>
 #include "core/codex/zstd/decompress.h"
-#include "core/concurrent/scoped_task.h"
-#include "core/concurrent/queue/lockfree_spsc.h"
+#include "core/cc/scoped_task.h"
+#include "core/cc/queue/lockfree_spsc.h"
 
 namespace zstd
 {

@@ -5,9 +5,9 @@
 #include <fstream>
 #include "core/codex/zstd/compressor.h"
 #include "core/codex/zstd/adapter.h"
-#include "core/concurrent/queue/lockfree_spsc.h"
-#include "core/concurrent/queue/sink_spsc.h"
-#include "core/concurrent/queue/source_spsc.h"
+#include "core/cc/queue/lockfree_spsc.h"
+#include "core/cc/queue/sink_spsc.h"
+#include "core/cc/queue/source_spsc.h"
 
 namespace zstd
 {

@@ -7,8 +7,8 @@
 #include "core/codex/zstd/decompressor.h"
 #include "core/codex/zstd/adapter.h"
 #include "core/codex/zstd/exception.h"
-#include "core/concurrent/queue/lockfree_spsc.h"
-#include "core/concurrent/queue/source_spsc.h"
+#include "core/cc/queue/lockfree_spsc.h"
+#include "core/cc/queue/source_spsc.h"
 
 namespace zstd
 {
