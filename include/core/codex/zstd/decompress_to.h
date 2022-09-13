@@ -1,4 +1,4 @@
-// Copyright (C) 2019, 2021 by Mark Melton
+// Copyright (C) 2019, 2021, 2022 by Mark Melton
 //
 
 #pragma once
@@ -42,8 +42,8 @@ void decompress_to(SourceQ& source, vector<T>& container, size_t block_size = 10
 template<class T>
 void decompress_to(std::istream& is, vector<T>& container)
 {
-    core::mt::queue::LockFreeSpSc<char> queue;
-    core::mt::scoped_task task([&]() { decompress(is, queue); });
+    core::cc::queue::LockFreeSpSc<char> queue;
+    core::cc::scoped_task task([&]() { decompress(is, queue); });
     decompress(queue, container);
     task.wait();
 }

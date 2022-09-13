@@ -1,4 +1,4 @@
-// Copyright (C) 2018, 2019, 2021 by Mark Melton
+// Copyright (C) 2018, 2019, 2021, 2022 by Mark Melton
 //
 
 #define ZSTD_STATIC_LINKING_ONLY
@@ -29,7 +29,7 @@ string decompress(const char *input_buffer, size_t input_size)
     {
 	string str{input_buffer, input_size};
 	std::stringstream ss{str};
-	core::mt::queue::SinkSpSc<char> sink;
+	core::cc::queue::SinkSpSc<char> sink;
 	decompress((std::istream&)ss, sink);
 	return sink.data();
     }
@@ -65,12 +65,12 @@ void decompress(InStream& is, OutStream&os) {
 
 #define SOURCE() (std::istream,				\
 		  std::stringstream,			\
-		  core::mt::queue::LockFreeSpSc<char>,	\
-		  core::mt::queue::SourceSpSc<char>)
+		  core::cc::queue::LockFreeSpSc<char>,	\
+		  core::cc::queue::SourceSpSc<char>)
 
 #define SINK() (std::ostream,				\
 		std::stringstream,			\
-		core::mt::queue::SinkSpSc<char>)
+		core::cc::queue::SinkSpSc<char>)
 
 #define PRODUCT() CORE_PP_EVAL_CARTESIAN_PRODUCT_SEQ(SOURCE(), SINK())
 

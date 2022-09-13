@@ -1,4 +1,4 @@
-// Copyright (C) 2019, 2021 by Mark Melton
+// Copyright (C) 2019, 2021, 2022 by Mark Melton
 //
 
 #define ZSTD_STATIC_LINKING_ONLY
@@ -57,13 +57,13 @@ void compress(InStream& is, OutStream& os) {
 
 #define SOURCE() (std::istream,				\
 		  std::stringstream,			\
-		  core::mt::queue::LockFreeSpSc<char>,	\
-		  core::mt::queue::SourceSpSc<char>)
+		  core::cc::queue::LockFreeSpSc<char>,	\
+		  core::cc::queue::SourceSpSc<char>)
 
 #define SINK() (std::ostream,				\
 		std::stringstream,			\
-		core::mt::queue::LockFreeSpSc<char>,	\
-		core::mt::queue::SinkSpSc<char>)
+		core::cc::queue::LockFreeSpSc<char>,	\
+		core::cc::queue::SinkSpSc<char>)
 
 #define PRODUCT() CORE_PP_EVAL_CARTESIAN_PRODUCT_SEQ(SOURCE(), SINK())
 

@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #include <sstream>
@@ -122,8 +122,8 @@ void Decompressor<Source>::close() {
 template class Decompressor<std::istream&>;
 template class Decompressor<std::ifstream&>;
 template class Decompressor<std::stringstream&>;
-template class Decompressor<core::mt::queue::LockFreeSpSc<char>&>;
-template class Decompressor<core::mt::queue::SourceSpSc<char>&>;
+template class Decompressor<core::cc::queue::LockFreeSpSc<char>&>;
+template class Decompressor<core::cc::queue::SourceSpSc<char>&>;
 
 template class Decompressor<std::ifstream>;
 

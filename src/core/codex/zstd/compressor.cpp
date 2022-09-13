@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #include <sstream>
@@ -76,8 +76,8 @@ void Compressor<Sink>::close() {
 template class Compressor<std::ostream&>;
 template class Compressor<std::ofstream&>;
 template class Compressor<std::stringstream&>;
-template class Compressor<core::mt::queue::LockFreeSpSc<char>&>;
-template class Compressor<core::mt::queue::SinkSpSc<char>&>;
+template class Compressor<core::cc::queue::LockFreeSpSc<char>&>;
+template class Compressor<core::cc::queue::SinkSpSc<char>&>;
 
 template class Compressor<std::ofstream>;
 
