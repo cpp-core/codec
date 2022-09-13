@@ -6,10 +6,10 @@
 #include "core/codex/bzip/compressor.h"
 #include "core/codex/bzip/decompress.h"
 #include "core/codex/bzip/decompressor.h"
-#include "core/concurrent/scoped_task.h"
-#include "core/concurrent/queue/lockfree_spsc.h"
-#include "core/concurrent/queue/sink_spsc.h"
-#include "core/concurrent/queue/source_spsc.h"
+#include "core/cc/scoped_task.h"
+#include "core/cc/queue/lockfree_spsc.h"
+#include "core/cc/queue/sink_spsc.h"
+#include "core/cc/queue/source_spsc.h"
 #include "coro/stream/stream.h"
 
 static const size_t NumberSamples = 1;
