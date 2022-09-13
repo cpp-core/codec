@@ -118,10 +118,10 @@ TEST(Zstd, Stream)
     for (auto str : take(std::move(g), NumberSamples)) {
 	std::stringstream ss;
 	
-	core::mt::queue::SourceSpSc<char> source(str);
+	core::cc::queue::SourceSpSc<char> source(str);
 	zstd::compress(source, (std::ostream&)ss);
 	
-	core::mt::queue::SinkSpSc<char> sink;
+	core::cc::queue::SinkSpSc<char> sink;
 	zstd::decompress((std::istream&)ss, sink);
 
 	EXPECT_EQ(str, sink.data());
@@ -132,12 +132,12 @@ TEST(Zstd, Queue)
 {
     auto g = str::any(0, 1024);
     for (auto str : take(std::move(g), NumberSamples)) {
-	core::mt::queue::SourceSpSc<char> source(str);
-	core::mt::queue::SinkSpSc<char> sink;
-	core::mt::queue::LockFreeSpSc<char> connector;
+	core::cc::queue::SourceSpSc<char> source(str);
+	core::cc::queue::SinkSpSc<char> sink;
+	core::cc::queue::LockFreeSpSc<char> connector;
 
-	auto task1 = core::mt::scoped_task([&]() { zstd::compress(source, connector); });
-	auto task2 = core::mt::scoped_task([&]() { zstd::decompress(connector, sink); });
+	auto task1 = core::cc::scoped_task([&]() { zstd::compress(source, connector); });
+	auto task2 = core::cc::scoped_task([&]() { zstd::decompress(connector, sink); });
 	task1.wait();
 	task2.wait();
 	EXPECT_EQ(str, sink.data());
@@ -148,8 +148,8 @@ TEST(Zstd, Container)
 {
     auto g = str::any(0, 1024);
     for (auto str : take(std::move(g), NumberSamples)) {
-	core::mt::queue::SourceSpSc<char> source(str);
-	core::mt::queue::LockFreeSpSc<char> connector;
+	core::cc::queue::SourceSpSc<char> source(str);
+	core::cc::queue::LockFreeSpSc<char> connector;
 	zstd::compress(source, connector);
 
 	ints new_vec;
