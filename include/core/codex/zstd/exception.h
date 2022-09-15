@@ -15,7 +15,7 @@ public:
     using Base = std::runtime_error;
     
     template<typename ...Ts>
-    error(const string& fmt, Ts... args)
+    error(const std::string& fmt, Ts... args)
 	: m_what("zstd:" + fmt::sprintf(fmt, args...))
     { }
     
@@ -23,7 +23,7 @@ public:
     { return m_what.c_str(); }
     
 private:
-    string m_what;
+    std::string m_what;
 };
 
 }; // zstd

@@ -8,6 +8,6 @@ namespace bzip {
 
 string compress(const char *begin, size_t count);
 string compress(const char *begin, const char *end);
-string compress(string_view str);
+string compress(std::string_view str);
 
 }; // bzip

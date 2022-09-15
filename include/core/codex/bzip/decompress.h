@@ -8,6 +8,6 @@ namespace bzip {
 
 string decompress(const char *begin, size_t count);
 string decompress(const char *begin, const char *end);
-string decompress(const string& str);
+string decompress(const std::string& str);
 
 }; // bzip

@@ -11,7 +11,7 @@ namespace zstd
 {
 
 template<class T>
-vector<T> decompress_as(string_view zdata)
+vector<T> decompress_as(std::string_view zdata)
 {
     auto buffer = decompress(zdata);
     auto nelems = buffer.size() / sizeof(T);

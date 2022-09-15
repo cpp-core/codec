@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #pragma once
@@ -21,7 +21,7 @@ namespace zstd
 // High-level interface:
 //
 // Decompressor d{cin};
-// string s, line;
+// std::string s, line;
 // while (d.read_line(line))
 //    s += line;
 //
@@ -31,9 +31,9 @@ namespace zstd
 // data directly from the the get area.
 //
 // Decompressor d{cin};
-// string s;
+// std::string s;
 // while (d.underflow())
-//     s += string_view{d.get().ptr_base(), d.get().ptr_position()};
+//     s += std::string_view{d.get().ptr_base(), d.get().ptr_position()};
 // 
 template<class Source>
 class Decompressor {
@@ -62,7 +62,7 @@ public:
     // (possibly empty) line was read and place the characters in
     // `line`. If there are no more characters to be read, return
     // `false` and set `line` to nil.
-    bool read_line(string& line);
+    bool read_line(std::string& line);
 
     // Attempt to read up to `count` decompressed bytes placing them
     // into buffer. Return the number of bytes read.
@@ -82,7 +82,7 @@ public:
 
     // Return a view of the current get area, i.e. the characters that
     // are ready to be read.
-    string_view view() const { return get_.view(); }
+    std::string_view view() const { return get_.view(); }
 
     // Return a reference to the get area for writing data.
     GetArea& get() { return get_; }

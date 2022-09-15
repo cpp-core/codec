@@ -37,7 +37,7 @@ public:
 private:
     std::istream& sin_;
     Filter filter_;
-    string line_;
+    std::string line_;
 };
 
 template<class Filter, class CharT = char, class TraitT = std::char_traits<CharT>>

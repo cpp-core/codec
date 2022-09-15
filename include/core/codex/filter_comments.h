@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #pragma once
@@ -9,7 +9,7 @@ namespace core {
 
 inline auto filter_comments(std::istream& is) {
     std::regex comment("^[ \t]*//");
-    return core::filter_istream(is, [=](string_view s) {
+    return core::filter_istream(is, [=](std::string_view s) {
 	return not std::regex_search(s.data(), comment);
     });
 }

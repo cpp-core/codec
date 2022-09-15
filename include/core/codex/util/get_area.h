@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #pragma once
@@ -28,7 +28,7 @@ public:
     char peek() const { return *ptr_; }
 
     // Return a view of the available characters.
-    string_view view() const { return {ptr_, (size_t)(end_ - ptr_)}; }
+    std::string_view view() const { return {ptr_, (size_t)(end_ - ptr_)}; }
 
     // Return a pointer to the first available character.
     const char *data() const { return ptr_; }

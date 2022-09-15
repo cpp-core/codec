@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #pragma once
@@ -11,7 +11,7 @@ namespace zstd
 class FileDecompressor : public Decompressor<std::ifstream> {
 public:
     using Base = Decompressor<std::ifstream>;
-    FileDecompressor(const string& file)
+    FileDecompressor(const std::string& file)
 	: Base(std::ifstream{file}) {
     }
 
