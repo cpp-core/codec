@@ -7,7 +7,7 @@
 
 namespace bzip {
 
-std::string ecompress(const std::string& str) {
+std::string decompress(const std::string& str) {
     std::stringstream ss(str);
     bzip::Decompressor d{ss};
     std::string ustr;

@@ -11,19 +11,19 @@ namespace zstd
 {
 
 template<class T>
-vector<T> decompress_as(std::string_view zdata)
+std::vector<T> decompress_as(std::string_view zdata)
 {
     auto buffer = decompress(zdata);
     auto nelems = buffer.size() / sizeof(T);
     if (nelems * sizeof(T) != buffer.size())
  	throw std::runtime_error("decompress_as: non-integral number of elements");
-    vector<T> vec(nelems);
+    std::vector<T> vec(nelems);
     std::copy(buffer.begin(), buffer.end(), reinterpret_cast<char*>(&vec[0]));
     return vec;
 }
 
 template<class SourceQ, class T>
-void decompress_to(SourceQ& source, vector<T>& container, size_t block_size = 1024)
+void decompress_to(SourceQ& source, std::vector<T>& container, size_t block_size = 1024)
 {
     container.resize(block_size);
     auto ptr = (char*)container.data();
@@ -40,7 +40,7 @@ void decompress_to(SourceQ& source, vector<T>& container, size_t block_size = 10
 }
 
 template<class T>
-void decompress_to(std::istream& is, vector<T>& container)
+void decompress_to(std::istream& is, std::vector<T>& container)
 {
     core::cc::queue::LockFreeSpSc<char> queue;
     core::cc::scoped_task task([&]() { decompress(is, queue); });

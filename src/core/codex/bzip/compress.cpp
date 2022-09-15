@@ -7,7 +7,7 @@
 
 namespace bzip {
 
-std::string ompress(const char *begin, size_t count) {
+std::string compress(const char *begin, size_t count) {
     std::stringstream ss;
     Compressor c{ss};
     c.write(begin, count);
@@ -15,11 +15,11 @@ std::string ompress(const char *begin, size_t count) {
     return ss.str();
 }
 
-std::string ompress(const char *begin, const char *end) {
+std::string compress(const char *begin, const char *end) {
     return compress(begin, end - begin);
 }
 
-std::string ompress(std::string_view str) {
+std::string compress(std::string_view str) {
     return compress(str.data(), str.size());
 }
 
