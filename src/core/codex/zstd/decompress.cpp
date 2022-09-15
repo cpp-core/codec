@@ -18,7 +18,7 @@
 namespace zstd
 {
 
-std::string ecompress(const char *input_buffer, size_t input_size)
+std::string decompress(const char *input_buffer, size_t input_size)
 {
     auto final_size = ZSTD_findDecompressedSize(input_buffer, input_size);
 
@@ -44,7 +44,7 @@ std::string ecompress(const char *input_buffer, size_t input_size)
     return buffer;
 }
 
-std::string ecompress(std::string_view str)
+std::string decompress(std::string_view str)
 {
     return decompress(str.data(), str.size());
 }

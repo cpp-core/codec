@@ -1,6 +1,5 @@
 // Copyright (C) 2021, 2022 by Mark Melton
 //
-
 #include <fmt/format.h>
 #include <ostream>
 #include <sstream>
@@ -71,3 +70,5 @@ void Compressor<Sink>::write(const char *input, size_t input_len) {
 
 template class bzip::Compressor<std::ostream>;
 template class bzip::Compressor<std::stringstream>;
+
+
