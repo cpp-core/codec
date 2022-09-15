@@ -152,7 +152,7 @@ TEST(Zstd, Container)
 	core::cc::queue::LockFreeSpSc<char> connector;
 	zstd::compress(source, connector);
 
-	ints new_vec;
+	std::vector<int> new_vec;
 	zstd::decompress_to(connector, new_vec);
 	
 	// EXPECT_EQ(new_vec, str);

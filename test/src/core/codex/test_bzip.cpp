@@ -2,6 +2,7 @@
 //
 
 #include <gtest/gtest.h>
+#include <string>
 #include "core/codex/bzip/compress.h"
 #include "core/codex/bzip/compressor.h"
 #include "core/codex/bzip/decompress.h"
@@ -72,7 +73,7 @@ TEST(Bzip, Pods)
 
 TEST(Bzip, Strings)
 {
-    for (auto str : coro::sampler<string>(0, 1024) | coro::take(NumberSamples)) {
+    for (auto str : coro::sampler<std::string>(0, 1024) | coro::take(NumberSamples)) {
 	auto zstr = bzip::compress(str);
 	auto ustr = bzip::decompress(zstr);
 	EXPECT_EQ(str, ustr);
