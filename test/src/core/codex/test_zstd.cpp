@@ -73,7 +73,7 @@ TEST(Zstd, Pods)
     zstd::Compressor c{ss, 2};
 
     int a = -42;
-    int64 b = -37;
+    std::int64_t b = -37;
     float x = -1.0;
     double y = -2.0;
     c.write_pod(a);
@@ -84,7 +84,7 @@ TEST(Zstd, Pods)
 
     zstd::Decompressor d{ss, 2};
     int a2;
-    int64 b2;
+    std::int64_t b2;
     float x2;
     double y2;
     
