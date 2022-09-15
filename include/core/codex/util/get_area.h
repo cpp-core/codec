@@ -2,6 +2,7 @@
 //
 
 #pragma once
+#include <string>
 #include "core/codex/util/buffer.h"
 
 namespace core
@@ -13,7 +14,7 @@ class GetArea : public core::BufferedArea {
 public:
     // Allocate a buffer of `capacity` bytes, set `begin` to the
     // start of the buffer and `count` to the capacity.
-    GetArea(uint capacity)
+    GetArea(unsigned int capacity)
 	: BufferedArea(capacity)
 	, ptr_(nullptr)
 	, end_(nullptr) {

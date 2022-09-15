@@ -3,7 +3,6 @@
 
 #pragma once
 #include <bzlib.h>
-#include "core/util/common.h"
 
 namespace bzip {
 

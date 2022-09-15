@@ -3,13 +3,12 @@
 
 #pragma once
 #include <istream>
-#include "core/util/common.h"
 
 namespace zstd
 {
 
-string decompress(const char *input_buffer, size_t input_size);
-string decompress(std::string_view str);
+std::string decompress(const char *input_buffer, size_t input_size);
+std::string decompress(std::string_view str);
 
 template<class InStream, class OutStream>
 void decompress(InStream& source, OutStream& sink);

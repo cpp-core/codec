@@ -5,7 +5,6 @@
 #include <memory>
 #include <type_traits>
 #include <zstd.h>
-#include "core/util/common.h"
 #include "core/codex/zstd/get_area.h"
 #include "core/codex/zstd/put_area.h"
 #include "core/codex/zstd/exception.h"

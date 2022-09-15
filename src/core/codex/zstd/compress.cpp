@@ -19,7 +19,7 @@
 namespace zstd
 {
 
-string compress(const char *input_buffer, size_t input_size)
+std::string ompress(const char *input_buffer, size_t input_size)
 {
     auto max_size = ZSTD_compressBound(input_size);
     std::string buffer;
@@ -34,7 +34,7 @@ string compress(const char *input_buffer, size_t input_size)
     return buffer;
 }
 
-string compress(std::string_view str)
+std::string ompress(std::string_view str)
 {
     return compress(str.data(), str.size());
 }

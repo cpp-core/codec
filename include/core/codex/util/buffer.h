@@ -3,7 +3,8 @@
 
 #pragma once
 #include <utility>
-#include "core/util/common.h"
+#include <cstdint>
+#include <algorithm>
 
 namespace core
 {

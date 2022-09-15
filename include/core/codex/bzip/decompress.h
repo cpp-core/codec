@@ -2,12 +2,12 @@
 //
 
 #pragma once
-#include "core/util/common.h"
+#include <string>
 
 namespace bzip {
 
-string decompress(const char *begin, size_t count);
-string decompress(const char *begin, const char *end);
-string decompress(const std::string& str);
+std::string decompress(const char *begin, size_t count);
+std::string decompress(const char *begin, const char *end);
+std::string decompress(const std::string& str);
 
 }; // bzip

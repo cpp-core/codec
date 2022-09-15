@@ -3,7 +3,6 @@
 
 #pragma once
 #include <ostream>
-#include "core/util/common.h"
 
 namespace zstd
 {
@@ -13,13 +12,13 @@ namespace zstd
 /// \param input_buffer Pointer to the input bytes.
 /// \param input_size Number of input bytes.
 /// \return The compressed bytes as a std::string
-string compress(const char *input_buffer, size_t input_size);
+std::string compress(const char *input_buffer, size_t input_size);
 
 /// Compress the inpuit using the **Zstandard** algorithm.
 ///
 /// \param str A std::string_view representing the input bytes.
 /// \return The compressed bytes as a std::string
-string compress(std::string_view str);
+std::string compress(std::string_view str);
 
 /// Compress the input using the **Zstandard** algorithm.
 ///
@@ -37,7 +36,7 @@ void compress(InStream& is, OutStream& os);
 /// \param storage A container representing the input bytes.
 /// \return The compressed bytes as a std::string
 template<template <class> class C, class T>
-string compress(const C<T>& storage)
+std::string compress(const C<T>& storage)
 { return compress((const char*)storage.data(), storage.size()); }
 
 }; // zstd

@@ -2,7 +2,6 @@
 //
 
 #pragma once
-#include "core/util/common.h"
 #include "core/codex/util/get_area.h"
 
 namespace bzip {
@@ -15,7 +14,7 @@ class GetArea : public core::GetArea {
 public:
     // Construct an area of the given `capacity` for managing the Bzip
     // output.
-    GetArea(char *&next, uint& avail, uint capacity);
+    GetArea(char *&next, unsigned int& avail, unsigned int capacity);
 
     // Prepare to recieve output from Bzip.
     void clear();
@@ -25,7 +24,7 @@ public:
 	  
 private:
     char *&next_;
-    uint& avail_;
+    unsigned int& avail_;
 };
 
 }; // bzip

@@ -2,12 +2,12 @@
 //
 
 #pragma once
-#include "core/util/common.h"
+#include <string>
 
 namespace bzip {
 
-string compress(const char *begin, size_t count);
-string compress(const char *begin, const char *end);
-string compress(std::string_view str);
+std::string compress(const char *begin, size_t count);
+std::string compress(const char *begin, const char *end);
+std::string compress(std::string_view str);
 
 }; // bzip

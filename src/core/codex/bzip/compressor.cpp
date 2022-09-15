@@ -1,6 +1,7 @@
 // Copyright (C) 2021, 2022 by Mark Melton
 //
 
+#include <fmt/format.h>
 #include <ostream>
 #include <sstream>
 #include "core/codex/bzip/compressor.h"
