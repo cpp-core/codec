@@ -15,7 +15,7 @@ TEST(Codex, Filter)
     const int LineFilter = 64;
     
     for (auto i = 0; i < NumberSamples; ++i) {
-	string lines;
+	std::string lines;
 	uint expected_count{0};
 	for (auto str : coro::str::alpha(0, MaxLineSize) | coro::take(MaxLineSize)) {
 	    str += '\n';
@@ -26,9 +26,9 @@ TEST(Codex, Filter)
 	}
 	
 	std::stringstream ss{lines};
-	core::filter_istream fin(ss, [](string_view s) { return s.size() < LineFilter; });
+	core::filter_istream fin(ss, [](std::string_view s) { return s.size() < LineFilter; });
 	
-	string line;
+	std::string line;
 	uint count{0};
 	while (std::getline(fin, line)) {
 	    ++count;
@@ -38,11 +38,11 @@ TEST(Codex, Filter)
     }
 }
 
-size_t count_lines(const string& str) {
+size_t count_lines(const std::string& str) {
     std::stringstream ss{str};
     auto sin = core::filter_comments(ss);
     
-    string line;
+    std::string line;
     size_t count{0};
     while (std::getline(sin, line))
 	++count;

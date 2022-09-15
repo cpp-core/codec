@@ -27,7 +27,7 @@ TEST(Bzip, Basic)
 	c.close();
 
 	bzip::Decompressor d{ss, 64};
-	string ustr;
+	std::string ustr;
 	while (d.underflow())
 	    ustr += d.view();
 	

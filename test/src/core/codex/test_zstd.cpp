@@ -32,14 +32,14 @@ public:
     void SetUp() override { fs::create_directories(root_); }
     void TearDown() override { fs::remove_all(root_); }
 
-    string tmpfile() {
+    std::string tmpfile() {
 	++counter_;
 	return fmt::format("{}/{}", root_, counter_);
     }
     
 private:
     size_t counter_{0};
-    string root_;
+    std::string root_;
 	
 };
 
@@ -59,7 +59,7 @@ TEST(Zstd, Basic)
 	c.close();
 
 	zstd::Decompressor d{std::ifstream{file}, 64};
-	string ustr;
+	std::string ustr;
 	while (d.underflow())
 	    ustr += d.view();
 	
@@ -161,14 +161,14 @@ TEST(Zstd, Container)
 
 TEST(Zstd, FileStream)
 {
-    const string file = env->tmpfile();
+    const std::string file = env->tmpfile();
     {
-	string line = "abc\n";
+	std::string line = "abc\n";
 	core::zstd_ofstream zofs{file};
 	zofs.write(line.data(), line.size());
     }
     {
-	string line;
+	std::string line;
 	core::zstd_ifstream zifs{file};
 	auto r = (bool)std::getline(zifs, line);
 	EXPECT_TRUE(r);
@@ -178,14 +178,14 @@ TEST(Zstd, FileStream)
 
 TEST(Zstd, FileDecompressor)
 {
-    const string file = env->tmpfile();
+    const std::string file = env->tmpfile();
     {
-	string line = "abc\n";
+	std::string line = "abc\n";
 	zstd::FileCompressor zofs{file};
 	zofs.write(line.data(), line.size());
     }
     {
-	string line;
+	std::string line;
 	zstd::FileDecompressor zifs{file};
 	auto r = zifs.read_line(line);
 	EXPECT_TRUE(r);

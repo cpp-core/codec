@@ -18,7 +18,7 @@ TEST(Zstd, Stream)
 	    zout << str;
 	}
 
-	string result_str;
+	std::string result_str;
 	core::zstd_istream zin(ss, 32);
 	zin >> result_str;
 
