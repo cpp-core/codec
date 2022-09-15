@@ -181,10 +181,10 @@ static std::string decode(String encoded_string, bool remove_linebreaks) {
     size_t pos = 0;
 
  //
- // The approximate length (bytes) of the decoded string might be one or
+ // The approximate length (bytes) of the decoded std::string might be one or
  // two bytes smaller, depending on the amount of trailing equal signs
- // in the encoded string. This approximation is needed to reserve
- // enough space in the string to be returned.
+ // in the encoded std::string. This approximation is needed to reserve
+ // enough space in the std::string to be returned.
  //
     size_t approx_length_of_decoded_string = length_of_string / 4 * 3;
     std::string ret;
@@ -192,7 +192,7 @@ static std::string decode(String encoded_string, bool remove_linebreaks) {
 
     while (pos < length_of_string) {
     //
-    // Iterate over encoded input string in chunks. The size of all
+    // Iterate over encoded input std::string in chunks. The size of all
     // chunks except the last one is 4 bytes.
     //
     // The last chunk might be padded with equal signs or dots
@@ -213,7 +213,7 @@ static std::string decode(String encoded_string, bool remove_linebreaks) {
 
        if ( ( pos + 2 < length_of_string  )       &&  // Check for data that is not padded with equal signs (which is allowed by RFC 2045)
               encoded_string[pos+2] != '='        &&
-              encoded_string[pos+2] != '.'            // accept URL-safe base 64 strings, too, so check for '.' also.
+              encoded_string[pos+2] != '.'            // accept URL-safe base 64 std::vector<std::string>, too, so check for '.' also.
           )
        {
        //

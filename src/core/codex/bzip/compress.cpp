@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #include <sstream>
@@ -19,7 +19,7 @@ string compress(const char *begin, const char *end) {
     return compress(begin, end - begin);
 }
 
-string compress(string_view str) {
+string compress(std::string_view str) {
     return compress(str.data(), str.size());
 }
 

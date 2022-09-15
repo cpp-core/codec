@@ -44,7 +44,7 @@ Decompressor<Source>::Decompressor(Decompressor&& other, Source& is)
 }
 
 template<class Source>
-bool Decompressor<Source>::read_line(string& line) {
+bool Decompressor<Source>::read_line(std::string& line) {
     line.clear();
     
     if (zsd_ == nullptr)

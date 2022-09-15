@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #include <istream>
@@ -37,7 +37,7 @@ void Decompressor<Source>::close() {
 }
 
 template<class Source>
-bool Decompressor<Source>::read_line(string& line) {
+bool Decompressor<Source>::read_line(std::string& line) {
     line.clear();
     
     if (not bz_)

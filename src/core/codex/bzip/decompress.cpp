@@ -1,4 +1,4 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #include <sstream>
@@ -7,10 +7,10 @@
 
 namespace bzip {
 
-string decompress(const string& str) {
+string decompress(const std::string& str) {
     std::stringstream ss(str);
     bzip::Decompressor d{ss};
-    string ustr;
+    std::string ustr;
     while (d.underflow())
 	ustr += d.view();
     return ustr;

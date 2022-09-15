@@ -27,14 +27,14 @@ string decompress(const char *input_buffer, size_t input_size)
     
     if (final_size == ZSTD_CONTENTSIZE_UNKNOWN)
     {
-	string str{input_buffer, input_size};
+	std::string str{input_buffer, input_size};
 	std::stringstream ss{str};
 	core::cc::queue::SinkSpSc<char> sink;
 	decompress((std::istream&)ss, sink);
 	return sink.data();
     }
 
-    string buffer;
+    std::string buffer;
     buffer.resize(final_size);
     
     auto size = ZSTD_decompress(buffer.data(), buffer.size(), input_buffer, input_size);
@@ -44,7 +44,7 @@ string decompress(const char *input_buffer, size_t input_size)
     return buffer;
 }
 
-string decompress(string_view str)
+string decompress(std::string_view str)
 {
     return decompress(str.data(), str.size());
 }
