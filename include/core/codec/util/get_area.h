@@ -3,7 +3,7 @@
 
 #pragma once
 #include <string>
-#include "core/codex/util/buffer.h"
+#include "core/codec/util/buffer.h"
 
 namespace core
 {

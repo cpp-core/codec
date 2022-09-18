@@ -2,7 +2,7 @@
 //
 
 #include <fstream>
-#include "core/codex/zstd/zstd_stream.h"
+#include "core/codec/zstd/zstd_stream.h"
 
 namespace core {
 

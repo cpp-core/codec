@@ -3,7 +3,7 @@
 
 #pragma once
 #include <istream>
-#include "core/codex/zstd/decompress.h"
+#include "core/codec/zstd/decompress.h"
 #include "core/cc/scoped_task.h"
 #include "core/cc/queue/lockfree_spsc.h"
 

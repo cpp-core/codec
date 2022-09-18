@@ -1,9 +1,9 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #pragma once
 #include <bzlib.h>
-#include "core/codex/bzip/get_area.h"
+#include "core/codec/bzip/get_area.h"
 
 namespace bzip {
 

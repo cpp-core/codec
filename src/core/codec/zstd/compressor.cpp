@@ -3,8 +3,8 @@
 
 #include <sstream>
 #include <fstream>
-#include "core/codex/zstd/compressor.h"
-#include "core/codex/zstd/adapter.h"
+#include "core/codec/zstd/compressor.h"
+#include "core/codec/zstd/adapter.h"
 #include "core/cc/queue/lockfree_spsc.h"
 #include "core/cc/queue/sink_spsc.h"
 #include "core/cc/queue/source_spsc.h"

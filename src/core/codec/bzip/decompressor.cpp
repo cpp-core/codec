@@ -4,8 +4,8 @@
 #include <fmt/format.h>
 #include <istream>
 #include <sstream>
-#include "core/codex/bzip/decompressor.h"
-#include "core/codex/zstd/adapter.h"
+#include "core/codec/bzip/decompressor.h"
+#include "core/codec/zstd/adapter.h"
 
 namespace bzip {
 

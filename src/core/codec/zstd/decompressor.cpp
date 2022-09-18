@@ -4,9 +4,9 @@
 #include <sstream>
 #include <fstream>
 #include <zstd.h>
-#include "core/codex/zstd/decompressor.h"
-#include "core/codex/zstd/adapter.h"
-#include "core/codex/zstd/exception.h"
+#include "core/codec/zstd/decompressor.h"
+#include "core/codec/zstd/adapter.h"
+#include "core/codec/zstd/exception.h"
 #include "core/cc/queue/lockfree_spsc.h"
 #include "core/cc/queue/source_spsc.h"
 

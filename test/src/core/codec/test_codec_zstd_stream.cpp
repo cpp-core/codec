@@ -3,8 +3,8 @@
 
 #include <gtest/gtest.h>
 #include <sstream>
-#include "core/codex/zstd/compress.h"
-#include "core/codex/zstd/zstd_stream.h"
+#include "core/codec/zstd/compress.h"
+#include "core/codec/zstd/zstd_stream.h"
 #include "coro/stream/stream.h"
 
 static const int NumberSamples = 64;

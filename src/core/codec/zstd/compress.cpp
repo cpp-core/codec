@@ -4,10 +4,10 @@
 #define ZSTD_STATIC_LINKING_ONLY
 #include <sstream>
 #include <zstd.h>
-#include "core/codex/zstd/compress.h"
-#include "core/codex/zstd/compressor.h"
-#include "core/codex/zstd/adapter.h"
-#include "core/codex/zstd/exception.h"
+#include "core/codec/zstd/compress.h"
+#include "core/codec/zstd/compressor.h"
+#include "core/codec/zstd/adapter.h"
+#include "core/codec/zstd/exception.h"
 #include "core/cc/queue/lockfree_spsc.h"
 #include "core/cc/queue/sink_spsc.h"
 #include "core/cc/queue/source_spsc.h"

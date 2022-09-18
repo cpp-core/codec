@@ -1,7 +1,7 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
-#include "core/codex/zstd/get_area.h"
+#include "core/codec/zstd/get_area.h"
 
 namespace zstd {
 

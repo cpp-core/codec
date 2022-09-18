@@ -2,9 +2,9 @@
 //
 
 #pragma once
-#include "core/codex/bzip/get_area.h"
-#include "core/codex/bzip/put_area.h"
-#include "core/codex/bzip/new_stream.h"
+#include "core/codec/bzip/get_area.h"
+#include "core/codec/bzip/put_area.h"
+#include "core/codec/bzip/new_stream.h"
 
 namespace bzip {
 

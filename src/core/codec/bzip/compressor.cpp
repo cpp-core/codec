@@ -3,8 +3,8 @@
 #include <fmt/format.h>
 #include <ostream>
 #include <sstream>
-#include "core/codex/bzip/compressor.h"
-#include "core/codex/bzip/new_stream.h"
+#include "core/codec/bzip/compressor.h"
+#include "core/codec/bzip/new_stream.h"
 
 namespace bzip {
 

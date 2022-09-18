@@ -3,10 +3,10 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "core/codex/bzip/compress.h"
-#include "core/codex/bzip/compressor.h"
-#include "core/codex/bzip/decompress.h"
-#include "core/codex/bzip/decompressor.h"
+#include "core/codec/bzip/compress.h"
+#include "core/codec/bzip/compressor.h"
+#include "core/codec/bzip/decompress.h"
+#include "core/codec/bzip/decompressor.h"
 #include "core/cc/scoped_task.h"
 #include "core/cc/queue/lockfree_spsc.h"
 #include "core/cc/queue/sink_spsc.h"

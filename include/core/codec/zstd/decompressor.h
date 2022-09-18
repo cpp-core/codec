@@ -2,8 +2,8 @@
 //
 
 #pragma once
-#include "core/codex/zstd/get_area.h"
-#include "core/codex/zstd/put_area.h"
+#include "core/codec/zstd/get_area.h"
+#include "core/codec/zstd/put_area.h"
 
 namespace zstd
 {

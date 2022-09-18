@@ -5,9 +5,9 @@
 #include <memory>
 #include <type_traits>
 #include <zstd.h>
-#include "core/codex/zstd/get_area.h"
-#include "core/codex/zstd/put_area.h"
-#include "core/codex/zstd/exception.h"
+#include "core/codec/zstd/get_area.h"
+#include "core/codec/zstd/put_area.h"
+#include "core/codec/zstd/exception.h"
 
 namespace zstd
 {

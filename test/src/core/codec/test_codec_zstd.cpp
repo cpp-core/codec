@@ -3,14 +3,14 @@
 
 #include <filesystem>
 #include <gtest/gtest.h>
-#include "core/codex/zstd/compress.h"
-#include "core/codex/zstd/compressor.h"
-#include "core/codex/zstd/decompress.h"
-#include "core/codex/zstd/decompress_to.h"
-#include "core/codex/zstd/decompressor.h"
-#include "core/codex/zstd/file_compressor.h"
-#include "core/codex/zstd/file_decompressor.h"
-#include "core/codex/zstd/zstd_fstream.h"
+#include "core/codec/zstd/compress.h"
+#include "core/codec/zstd/compressor.h"
+#include "core/codec/zstd/decompress.h"
+#include "core/codec/zstd/decompress_to.h"
+#include "core/codec/zstd/decompressor.h"
+#include "core/codec/zstd/file_compressor.h"
+#include "core/codec/zstd/file_decompressor.h"
+#include "core/codec/zstd/zstd_fstream.h"
 #include "core/cc/scoped_task.h"
 #include "core/cc/queue/lockfree_spsc.h"
 #include "core/cc/queue/sink_spsc.h"

@@ -2,8 +2,8 @@
 //
 
 #include <sstream>
-#include "core/codex/bzip/decompress.h"
-#include "core/codex/bzip/decompressor.h"
+#include "core/codec/bzip/decompress.h"
+#include "core/codec/bzip/decompressor.h"
 
 namespace bzip {
 

@@ -1,9 +1,9 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
-#include "core/codex/zstd/decompressor.h"
-#include "core/codex/zstd/compressor.h"
-#include "core/codex/util/buffer.h"
+#include "core/codec/zstd/decompressor.h"
+#include "core/codec/zstd/compressor.h"
+#include "core/codec/util/buffer.h"
 
 namespace core {
 

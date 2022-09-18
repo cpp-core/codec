@@ -1,9 +1,9 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #pragma once
 #include <zstd.h>
-#include "core/codex/util/buffer.h"
+#include "core/codec/util/buffer.h"
 
 namespace zstd
 {

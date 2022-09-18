@@ -3,7 +3,7 @@
 
 #pragma once
 #include <fstream>
-#include "core/codex/zstd/decompressor.h"
+#include "core/codec/zstd/decompressor.h"
 
 namespace zstd
 {

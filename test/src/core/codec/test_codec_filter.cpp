@@ -3,8 +3,8 @@
 
 #include <gtest/gtest.h>
 #include <sstream>
-#include "core/codex/filter.h"
-#include "core/codex/filter_comments.h"
+#include "core/codec/filter.h"
+#include "core/codec/filter_comments.h"
 #include "coro/stream/stream.h"
 
 static const int NumberSamples = 64;

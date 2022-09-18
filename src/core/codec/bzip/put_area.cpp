@@ -1,9 +1,9 @@
-// Copyright (C) 2021 by Mark Melton
+// Copyright (C) 2021, 2022 by Mark Melton
 //
 
 #include <istream>
 #include <sstream>
-#include "core/codex/bzip/put_area.h"
+#include "core/codec/bzip/put_area.h"
 
 namespace bzip {
 
