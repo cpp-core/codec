@@ -1,15 +1,10 @@
-[![Build and Unit Test](https://github.com/melton1968/cxx-core-cc/actions/workflows/build.yaml/badge.svg)](https://github.com/melton1968/cxx-core-cc/actions/workflows/build.yaml)
+[![Build and Unit Test](https://github.com/melton1968/cxx-core-codec/actions/workflows/build.yaml/badge.svg)](https://github.com/melton1968/cxx-core-codec/actions/workflows/build.yaml)
 
-# Functional Programming
+# Codec
 
-Primitives to support a functional programming style.
+Base64, libbz2 and zstd translation / (de)compression.
 
 ## At A Glance
-
-* [Either]() -- 
-* [Option]() -- 
-* [Try]() -- 
-* [match]() -- 
 
 ## Installation
 
@@ -17,19 +12,6 @@ Primitives to support a functional programming style.
 
     git clone git@github.com:melton1968/cxx-depends
 	mkdir cxx-depends/build && cd cxx-depends/build
-    CC=clang-mp-11 CXX=clang++-mp-11 cmake -DCMAKE_INSTALL_PREFIX=$HOME/opt -DCORE_FP_TEST=ON ..
-	make cxx_core_fp_check # Run tests
-	make cxx_core_fp       # Build and install
-	
-### Standalone
-
-	git clone git@github.com:melton1968/cxx-core-fp
-	mkdir cxx-core-fp/build && cd cxx-core-fp/build
-    CC=clang-mp-11 CXX=clang++-mp-11 cmake -DCMAKE_INSTALL_PREFIX=$HOME/opt -DCORE_FP_TEST=ON ..
-	make check    # Run tests
-	make install  # Install
-	
-Compiling and running the tests requires googletest to be
-installed. This happens automagically when using cxx-depends.
-	
-	
+    CC=clang-mp-11 CXX=clang++-mp-11 cmake -DCMAKE_INSTALL_PREFIX=$HOME/opt -DCORE_CODEC_TEST=ON ..
+	make cxx_core_codec_check # Run tests
+	make cxx_core_codec       # Build and install

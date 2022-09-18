@@ -22,6 +22,7 @@ jobs:
         ssh-private-key: |
           ${{ secrets.CXX_CORE_CC }}
           ${{ secrets.CXX_CORE_CHRONO }}
+          ${{ secrets.CXX_CORE_CODEC }}
           ${{ secrets.CXX_CORE_FP }}
           ${{ secrets.CXX_CORE_MP }}
           ${{ secrets.CXX_CORE_PP }}
@@ -32,11 +33,11 @@ jobs:
           ${{ secrets.CXX_DEPENDS }}
           ${{ secrets.CXX_PLY }}
         
-    - name: Checkout cxx-core-cc
+    - name: Checkout cxx-core-codec
       uses: actions/checkout@v2
       with:
-        repository: melton1968/cxx-core-cc
-        path: cxx-core-cc
+        repository: melton1968/cxx-core-codec
+        path: cxx-core-codec
         
     - name: Checkout cxx-depends
       uses: actions/checkout@v2
@@ -50,8 +51,8 @@ jobs:
         export CC=clang-11
         export CXX=clang++-11
         mkdir cxx-depends/build && pushd cxx-depends/build
-        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CC_TEST=ON ..
-        make cxx_core_cc-depends
+        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CODEC_TEST=ON ..
+        make cxx_core_codec-depends
         popd
 
     - name: Build and run the tests
@@ -59,7 +60,7 @@ jobs:
         export CC=clang-11
         export CXX=clang++-11
         mkdir cxx-core-cc/build && pushd cxx-core-cc/build
-        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CC_TEST=ON ..
+        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CODEC_TEST=ON ..
         make
         make check
         make install
