@@ -27,11 +27,6 @@ endif()
 option(CORE_CODEC_TEST "Generate the tests." OFF)
 option(CORE_CODEC_DOCS "Generate the docs." OFF)
 
-set(CMAKE_MINIMUM_REQUIRED_VERSION 3.22)
-set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
-message("-- cxx-core-codec: CMAKE_MINIMUM_REQUIRED_VERSION: ${CMAKE_MINIMUM_REQUIRED_VERSION}")
-message("-- cxx-core-codec: PKG_CONFIG_USE_CMAKE_PREFIX_PATH: ${PKG_CONFIG_USE_CMAKE_PREFIX_PATH}")
-
 # Add our dependencies
 #
 include(GNUInstallDirs)
@@ -39,7 +34,8 @@ find_package(cxx_core_cc REQUIRED)
 find_package(libbz2 REQUIRED)
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(ZSTD REQUIRED libzstd)
+set(CMAKE_PREFIX_PATH ${CMAKE_INSTALL_PREFIX})
+pkg_check_modules(ZSTD REQUIRED IMPORTED_TARGET libzstd)
 
 # Output configuration
 #
@@ -48,6 +44,7 @@ message("-- cxx-core-codec: Included from: ${CMAKE_SOURCE_DIR}")
 message("-- cxx-core-codec: CORE_CODEC_TEST ${CORE_CODEC_TEST}")
 message("-- cxx-core-codec: CORE_CODEC_DOCS ${CORE_CODEC_DOCS}")
 message("-- cxx-core-codec: CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
+message("-- cxx-core-codec: CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
 message("-- cxx-core-codec: cxx_core_cc: ${cxx_core_cc_DIR}")
 message("-- cxx-core-codec: libbz2: ${libbz2_DIR}")
 message("-- cxx-core-codec: zstd: ${ZSTD_LDFLAGS}")
@@ -88,7 +85,7 @@ add_library(cxx_core_codec ${FILES})
 set(LIBRARIES
   cxx_core_cc::cxx_core_cc
   libbz2::cxx-libbz2
-  ${ZSTD_LDFLAGS}
+  PkgConfig::ZSTD
   )
 
 target_link_libraries(cxx_core_codec PUBLIC ${LIBRARIES})
