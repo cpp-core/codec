@@ -43,6 +43,9 @@ message("-- cxx-core-codec: Included from: ${CMAKE_SOURCE_DIR}")
 message("-- cxx-core-codec: CORE_CODEC_TEST ${CORE_CODEC_TEST}")
 message("-- cxx-core-codec: CORE_CODEC_DOCS ${CORE_CODEC_DOCS}")
 message("-- cxx-core-codec: CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
+message("-- cxx-core-codec: cxx_core_cc: ${cxx_core_cc_DIR}")
+message("-- cxx-core-codec: libbz2: ${libbz2_DIR}")
+message("-- cxx-core-codec: zstd: ${ZSTD_DIR}")
 
 # Compilation
 #
