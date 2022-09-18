@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+check_required_components("@PROJECT_NAME@")
+
+include(CMakeFindDependencyMacro)
+find_dependency(cxx_coro_stream)
+find_dependency(cxx_core_util)
+find_dependency(fmt)
+find_dependency(nlohmann_json)
