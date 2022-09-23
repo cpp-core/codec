@@ -34,7 +34,7 @@ jobs:
         export CC=clang-11
         export CXX=clang++-11
         mkdir depends/build && pushd depends/build
-        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CODEC_TEST=ON ..
+        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCODEC_TEST=ON ..
         make codec-depends
         popd
 
@@ -43,7 +43,7 @@ jobs:
         export CC=clang-11
         export CXX=clang++-11
         mkdir codec/build && pushd codec/build
-        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CODEC_TEST=ON ..
+        cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCODEC_TEST=ON ..
         make
         make check
         make install
