@@ -35,7 +35,7 @@ jobs:
         export CXX=clang++-11
         mkdir depends/build && pushd depends/build
         cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CODEC_TEST=ON ..
-        make cxx_core_codec-depends
+        make codec-depends
         popd
 
     - name: Build and run the tests
