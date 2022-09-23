@@ -16,41 +16,24 @@ jobs:
     - name: Requirements
       run: sudo apt-get install -y clang-11 libc++-11-dev libc++abi-11-dev
       
-    - name: SSH Agent
-      uses: webfactory/ssh-agent@v0.5.4
-      with:
-        ssh-private-key: |
-          ${{ secrets.CXX_CORE_CC }}
-          ${{ secrets.CXX_CORE_CHRONO }}
-          ${{ secrets.CXX_CORE_CODEC }}
-          ${{ secrets.CXX_CORE_FP }}
-          ${{ secrets.CXX_CORE_MP }}
-          ${{ secrets.CXX_CORE_PP }}
-          ${{ secrets.CXX_CORE_STRING }}
-          ${{ secrets.CXX_CORE_TUPLE }}
-          ${{ secrets.CXX_CORE_UTIL }}
-          ${{ secrets.CXX_CORO_STREAM }}
-          ${{ secrets.CXX_DEPENDS }}
-          ${{ secrets.CXX_PLY }}
-        
-    - name: Checkout cxx-core-codec
+    - name: Checkout codec
       uses: actions/checkout@v2
       with:
-        repository: melton1968/cxx-core-codec
-        path: cxx-core-codec
+        repository: cpp-core/codec
+        path: codec
         
-    - name: Checkout cxx-depends
+    - name: Checkout depends
       uses: actions/checkout@v2
       with:
-        repository: melton1968/cxx-depends
+        repository: cpp-core/depends
         ref: main
-        path: cxx-depends
+        path: depends
         
     - name: Build dependencies
       run: |
         export CC=clang-11
         export CXX=clang++-11
-        mkdir cxx-depends/build && pushd cxx-depends/build
+        mkdir depends/build && pushd depends/build
         cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CODEC_TEST=ON ..
         make cxx_core_codec-depends
         popd
@@ -59,7 +42,7 @@ jobs:
       run: |
         export CC=clang-11
         export CXX=clang++-11
-        mkdir cxx-core-codec/build && pushd cxx-core-codec/build
+        mkdir codec/build && pushd codec/build
         cmake -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/opt -DCORE_CODEC_TEST=ON ..
         make
         make check
