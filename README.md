@@ -1,4 +1,4 @@
-[![Build and Unit Test](https://github.com/melton1968/cxx-core-codec/actions/workflows/build.yaml/badge.svg)](https://github.com/melton1968/cxx-core-codec/actions/workflows/build.yaml)
+[![Build and Unit Test](https://github.com/cpp-core/codec/actions/workflows/build.yaml/badge.svg)](https://github.com/cpp-core/codec/actions/workflows/build.yaml)
 
 # Codec
 
