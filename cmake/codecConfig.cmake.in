@@ -1,7 +1,7 @@
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
-find_dependency(util)
+find_dependency(cc)
 find_dependency(libbz2)
 find_dependency(zstd)
 
